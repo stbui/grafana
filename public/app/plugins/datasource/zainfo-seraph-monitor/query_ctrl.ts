@@ -8,7 +8,10 @@ import { TemplateSrv } from 'app/features/templating/template_srv';
 import { InfluxQuery } from './types';
 import InfluxDatasource from './datasource';
 
-export class InfluxQueryCtrl extends QueryCtrl {
+import './group_by';
+import './tag';
+
+export class SeraphQueryCtrl extends QueryCtrl {
   static templateUrl = 'partials/query.editor.html';
 
   datasource: InfluxDatasource;

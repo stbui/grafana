@@ -35,6 +35,10 @@ const azureMonitorPlugin = async () =>
   await import(
     /* webpackChunkName: "azureMonitorPlugin" */ 'app/plugins/datasource/grafana-azure-monitor-datasource/module'
   );
+const zainfoSeraphMonitorPlugin = async () =>
+  await import(
+    /* webpackChunkName: "zainfoSeraphMonitorPlugin" */ 'app/plugins/datasource/zainfo-seraph-monitor/module'
+  );
 
 import * as textPanel from 'app/plugins/panel/text/module';
 import * as graph2Panel from 'app/plugins/panel/graph2/module';
@@ -76,6 +80,7 @@ const builtInPlugins: any = {
   'app/plugins/datasource/testdata/module': testDataDSPlugin,
   'app/plugins/datasource/cloud-monitoring/module': cloudMonitoringPlugin,
   'app/plugins/datasource/grafana-azure-monitor-datasource/module': azureMonitorPlugin,
+  'app/plugins/datasource/zainfo-seraph-monitor/module': zainfoSeraphMonitorPlugin,
 
   'app/plugins/panel/text/module': textPanel,
   'app/plugins/panel/graph2/module': graph2Panel,

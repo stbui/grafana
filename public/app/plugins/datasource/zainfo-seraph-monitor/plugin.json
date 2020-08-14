@@ -1,0 +1,29 @@
+{
+  "type": "datasource",
+  "name": "zainfo-seraph-monitor",
+  "id": "zainfo-seraph-monitor",
+  "category": "logging",
+
+  "info": {
+    "description": "Open source logging & analytics database",
+    "author": {
+      "name": "stbui",
+      "url": "https://grafana.com"
+    },
+    "keywords": ["influxdb_logo"],
+    "logos": {
+      "small": "img/influxdb_logo.svg",
+      "large": "img/influxdb_logo.svg"
+    },
+    "links": [{ "name": "Learn more", "url": "https://grafana.com/docs/features/datasources/influxdb_logo/" }]
+  },
+
+  "alerting": true,
+  "annotations": true,
+  "metrics": true,
+  "logs": true,
+
+  "queryOptions": {
+    "minInterval": true
+  }
+}
