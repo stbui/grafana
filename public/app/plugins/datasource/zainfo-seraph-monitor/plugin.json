@@ -1,29 +1,28 @@
 {
   "type": "datasource",
-  "name": "zainfo-seraph-monitor",
+  "name": "Zainfo-seraph-monitor",
   "id": "zainfo-seraph-monitor",
-  "category": "logging",
+  "category": "tsdb",
 
-  "info": {
-    "description": "Open source logging & analytics database",
-    "author": {
-      "name": "stbui",
-      "url": "https://grafana.com"
-    },
-    "keywords": ["influxdb_logo"],
-    "logos": {
-      "small": "img/influxdb_logo.svg",
-      "large": "img/influxdb_logo.svg"
-    },
-    "links": [{ "name": "Learn more", "url": "https://grafana.com/docs/features/datasources/influxdb_logo/" }]
-  },
-
-  "alerting": true,
-  "annotations": true,
+  "defaultMatchFormat": "regex values",
   "metrics": true,
   "logs": true,
+  "annotations": true,
+  "alerting": true,
 
   "queryOptions": {
     "minInterval": true
+  },
+
+  "info": {
+    "description": "Open source time series database",
+    "author": {
+      "name": "Grafana Labs",
+      "url": "https://grafana.com"
+    },
+    "logos": {
+      "small": "img/influxdb_logo.svg",
+      "large": "img/influxdb_logo.svg"
+    }
   }
 }

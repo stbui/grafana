@@ -15,6 +15,8 @@ export interface InfluxOptions extends DataSourceJsonData {
   organization?: string;
   defaultBucket?: string;
   maxSeries?: number;
+
+  seraphApi?: string;
 }
 
 export interface InfluxSecureJsonData {

@@ -3,16 +3,23 @@ import coreModule from 'app/core/core_module';
 import { GrafanaRootScope } from 'app/routes/GrafanaCtrl';
 import { seraphSelectUpdated } from './event';
 
-export class seraphGroupCtrl {
+export class serapSelectCtrl {
   /** @ngInject */
-  constructor($scope: any, $rootScope: GrafanaRootScope) {
+  constructor($scope: any, uiSegmentSrv: any, $rootScope: GrafanaRootScope) {
     const part = $scope.part;
     const partDef = part.def;
     // 值
     const type = part.part.type;
-    const segment = $scope.segment;
 
-    // console.log('seraphGroupCtrl', part);
+    console.log('serapSelectCtrl', part);
+
+    $rootScope.onAppEvent(
+      seraphSelectUpdated,
+      () => {
+        $scope.validateModel();
+      },
+      $scope
+    );
 
     function addTypeahead(param: any, index: number) {
       if (!param.options && !param.dynamicLookup) {
@@ -23,28 +30,19 @@ export class seraphGroupCtrl {
         let options = param.options;
 
         $scope.options = options.map((f: any) => ({ text: f, value: f }));
-        $scope.option = part.params[index];
       }
 
-      if (type === 'tag') {
-        console.log('optionsoptionsoptionsoptionsoptions', $scope.getFields());
+      if (type === 'field') {
         $scope.options = $scope.getFields();
-        $scope.option = part.params[index];
       }
+
+      $scope.option = part.params[index];
     }
 
     function optionChanged(paramIndex: any) {
       part.updateParam($scope.option, paramIndex);
       $scope.handleEvent({ $event: { name: 'get-param-changed' } });
     }
-
-    $rootScope.onAppEvent(
-      seraphSelectUpdated,
-      () => {
-        $scope.validateModel();
-      },
-      $scope
-    );
 
     $scope.init = () => {
       _.each(partDef.params, (param: any, index: number) => {
@@ -56,46 +54,48 @@ export class seraphGroupCtrl {
 
         addTypeahead(param, index);
       });
+
+      if (type === 'mean') {
+        $scope.options = [
+          { text: 'mean()', value: 'mean' },
+          { text: 'count()', value: 'count' },
+          { text: 'sum()', value: 'sum' },
+        ];
+        $scope.option = type;
+        $scope.optionChanged = () => $scope.addSelect({ $event: { value: $scope.option } });
+      }
     };
 
     $scope.add = () => {
-      console.log('add');
-      segment.value = 'tag()';
-      $scope.onChange({ $event: { name: 'action' } });
+      $scope.addSelect({ $event: { value: 'field' } });
     };
 
     $scope.remove = () => {
-      console.log('remvoe');
       $scope.handleEvent({ $event: { name: 'action' } });
     };
 
     $scope.validateModel = () => {
-      $scope.validateModel = () => {
-        $scope.init();
-      };
+      $scope.init();
     };
 
     $scope.init();
   }
 }
 
-export function seraphGroup() {
+export function seraphSelect() {
   return {
-    templateUrl: 'public/app/plugins/datasource/zainfo-seraph-monitor/partials/group_by.html',
-    controller: seraphGroupCtrl,
+    templateUrl: 'public/app/plugins/datasource/zainfo-seraph-monitor/partials/select.html',
+    controller: serapSelectCtrl,
     restrict: 'E',
     scope: {
       target: '=',
       index: '=',
-      onChange: '&',
-      getOptions: '&',
+      getFields: '&',
+      addSelect: '&',
       handleEvent: '&',
       part: '=',
-      segment: '=',
-      addHandleEvent: '&',
-      getFields: '&',
     },
   };
 }
 
-coreModule.directive('seraphGroupby', seraphGroup);
+coreModule.directive('seraphSelect', seraphSelect);

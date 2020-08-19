@@ -31,6 +31,7 @@ export default class InfluxDatasource extends DataSourceWithBackend<InfluxQuery,
   responseParser: any;
   httpMode: string;
   is2x: boolean;
+  seraphApi: any;
 
   constructor(instanceSettings: DataSourceInstanceSettings<InfluxOptions>) {
     super(instanceSettings);
@@ -43,7 +44,8 @@ export default class InfluxDatasource extends DataSourceWithBackend<InfluxQuery,
     this.username = instanceSettings.username ?? '';
     this.password = instanceSettings.password ?? '';
     this.name = instanceSettings.name;
-    this.database = instanceSettings.database;
+    // this.database = instanceSettings.database;
+    this.database = 'k8s_metric';
     this.basicAuth = instanceSettings.basicAuth;
     this.withCredentials = instanceSettings.withCredentials;
     const settingsData = instanceSettings.jsonData || ({} as InfluxOptions);
@@ -51,6 +53,8 @@ export default class InfluxDatasource extends DataSourceWithBackend<InfluxQuery,
     this.httpMode = settingsData.httpMode || 'GET';
     this.responseParser = new ResponseParser();
     this.is2x = settingsData.version === InfluxVersion.Flux;
+    //
+    this.seraphApi = instanceSettings.jsonData.seraphApi;
   }
 
   query(request: DataQueryRequest<InfluxQuery>): Observable<DataQueryResponse> {
@@ -480,5 +484,52 @@ export default class InfluxDatasource extends DataSourceWithBackend<InfluxQuery,
     }
 
     return date.valueOf() + 'ms';
+  }
+
+  getSeraphMonitor() {
+    const req = {
+      url: this.seraphApi,
+    };
+
+    return getBackendSrv()
+      .datasourceRequest(req)
+      .then(result => {
+        const test = {
+          k8sMetric: {
+            jvm监控: {
+              jvm: {
+                jvm_memery_usage: {
+                  filed: ['filed1', 'filed2'],
+                  tag: ['usage_app', 'usage_host', 'podName'],
+                },
+                jvm_gc_pause_seconds_count: {
+                  filed: ['value', 'count'],
+                  tag: ['count_app', 'host', 'podName'],
+                },
+              },
+            },
+            容器监控: {
+              k8s: {
+                k8s_node_avaliable: {
+                  filed: ['value'],
+                  tag: ['app', 'host', 'podName'],
+                },
+              },
+            },
+          },
+          metric_agg: {
+            日志监控: {
+              xxx: {
+                xxxyyy: {
+                  filed: ['value'],
+                  tag: ['app', 'host', 'podName'],
+                },
+              },
+            },
+          },
+        };
+
+        return test.k8sMetric;
+      });
   }
 }

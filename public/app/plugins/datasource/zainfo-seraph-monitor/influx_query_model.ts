@@ -25,13 +25,13 @@ export default class InfluxQueryModel {
     target.orderByTime = target.orderByTime || 'ASC';
     target.tags = target.tags || [];
     target.groupBy = target.groupBy || [
-      { type: 'time', params: ['$__interval'] },
-      { type: 'fill', params: ['null'] },
+      { type: 'time', params: ['1s'] },
+      { type: 'fill', params: ['none'] },
     ];
     target.select = target.select || [
       [
         { type: 'field', params: ['value'] },
-        { type: 'mean', params: [] },
+        // { type: 'mean', params: [] },
       ],
     ];
 

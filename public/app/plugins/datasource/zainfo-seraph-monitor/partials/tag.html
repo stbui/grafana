@@ -1,4 +1,4 @@
-<div class="gf-form-inline" ng-if="fitlerAggCount > 1">
+<div class="gf-form-inline" ng-if="index > 0">
     <div class="gf-form">
         <div class="gf-form-select-wrapper">
             <select class="gf-form-input width-6" placeholder="请选择" ng-model="condition"
@@ -28,12 +28,12 @@
     </div>
 
     <div class="gf-form">
-        <label class="gf-form-label" ng-if="isFirst">
+        <!-- <label class="gf-form-label" ng-if="isFirst">
             <a class="pointer" ng-click="addFilterAgg()">
                 <icon name="'plus'"></icon>
             </a>
-        </label>
-        <label class="gf-form-label" ng-if="fitlerAggCount > 1">
+        </label> -->
+        <label class="gf-form-label">
             <a class="pointer" ng-click="removeFilterAgg()">
                 <icon name="'minus'"></icon>
             </a>

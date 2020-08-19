@@ -1,15 +1,16 @@
 import _ from 'lodash';
 import coreModule from 'app/core/core_module';
 import { GrafanaRootScope } from 'app/routes/GrafanaCtrl';
-import { CoreEvents } from 'app/types';
+import { seraphSelectUpdated } from './event';
 
-export class MetricFilterAggCtrl {
+export class TagCtrl {
   /** @ngInject */
   constructor($scope: any, uiSegmentSrv: any, $rootScope: GrafanaRootScope) {
-    const fitlerAggs = $scope.target.tags;
+    const segment = $scope.segment;
+    const tags = $scope.target.tags;
 
     $rootScope.onAppEvent(
-      CoreEvents.elasticQueryUpdated,
+      seraphSelectUpdated,
       () => {
         $scope.validateModel();
       },
@@ -17,55 +18,57 @@ export class MetricFilterAggCtrl {
     );
 
     $scope.init = () => {
-      $scope.fields = [
-        { text: 1, value: 1 },
-        { text: 2, value: 2 },
-      ];
-
       $scope.operators = [
+        { text: '=', value: '=' },
+        { text: '!=', value: '!=' },
         { text: '>', value: '>' },
         { text: '<', value: '<' },
+        { text: '<>', value: '<>' },
       ];
 
       $scope.conditions = [
-        { text: 'and', value: 'AND' },
-        { text: 'or', value: 'OR' },
+        { text: 'AND', value: 'AND' },
+        { text: 'OR', value: 'OR' },
       ];
 
       // 初始化
-      $scope.condition = 'AND';
-      $scope.filterKey = 1;
+      $scope.filterKey = segment.key;
+      $scope.operator = segment.operator;
+      $scope.value = segment.value;
+      $scope.condition = segment.condition;
 
-      $scope.agg = fitlerAggs[$scope.index];
+      $scope.agg = tags[$scope.index];
       $scope.validateModel();
     };
 
     $scope.validateModel = () => {
-      $scope.index = _.indexOf(fitlerAggs, $scope.agg);
+      $scope.index = _.indexOf(tags, $scope.agg);
       $scope.isFirst = $scope.index === 0;
-      $scope.fitlerAggCount = fitlerAggs.length;
+      $scope.count = tags.length;
+
+      $scope.fields = $scope.getFields();
     };
 
     $scope.addFilterAgg = () => {
-      fitlerAggs.push({ condition: 'AND' });
+      tags.push({ condition: 'AND' });
       $scope.onChange();
     };
 
     $scope.removeFilterAgg = () => {
-      fitlerAggs.splice($scope.index, 1);
+      tags.splice($scope.index, 1);
       $scope.onChange();
     };
 
     $scope.fieldsChanged = () => {
-      fitlerAggs[$scope.index].key = $scope.filterKey;
+      segment.key = $scope.filterKey;
       $scope.onChange();
     };
     $scope.operatorsChanged = () => {
-      fitlerAggs[$scope.index].operator = $scope.operator;
+      segment.operator = $scope.operator;
       $scope.onChange();
     };
     $scope.valueChanged = () => {
-      fitlerAggs[$scope.index].value = $scope.value;
+      segment.value = $scope.value;
       $scope.onChange();
     };
 
@@ -73,19 +76,21 @@ export class MetricFilterAggCtrl {
   }
 }
 
-export function metricFilterAgg() {
+export function seraphTag() {
   return {
     templateUrl: 'public/app/plugins/datasource/zainfo-seraph-monitor/partials/tag.html',
-    controller: MetricFilterAggCtrl,
+    controller: TagCtrl,
     restrict: 'E',
     scope: {
       target: '=',
       index: '=',
-      onChange: '&',
       getFields: '&',
-      esVersion: '=',
+
+      segment: '=',
+      getOptions: '&',
+      onChange: '&',
     },
   };
 }
 
-coreModule.directive('metricTag', metricFilterAgg);
+coreModule.directive('seraphTag', seraphTag);

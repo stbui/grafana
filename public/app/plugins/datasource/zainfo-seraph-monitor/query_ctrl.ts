@@ -7,9 +7,12 @@ import { QueryCtrl } from 'app/plugins/sdk';
 import { TemplateSrv } from 'app/features/templating/template_srv';
 import { InfluxQuery } from './types';
 import InfluxDatasource from './datasource';
+import { GrafanaRootScope } from 'app/routes/GrafanaCtrl';
+import { seraphSelectUpdated } from './event';
 
 import './group_by';
 import './tag';
+import './select';
 
 export class SeraphQueryCtrl extends QueryCtrl {
   static templateUrl = 'partials/query.editor.html';
@@ -25,13 +28,20 @@ export class SeraphQueryCtrl extends QueryCtrl {
   selectMenu: any;
   measurementSegment: any;
   removeTagFilterSegment: any;
+  monitorType: any;
+  monitorGroup: any;
+  monitorMetric: any;
+  monitorFields: any;
+
+  serapMonitorDataSource: any;
 
   /** @ngInject */
   constructor(
     $scope: any,
     $injector: auto.IInjectorService,
     private templateSrv: TemplateSrv,
-    private uiSegmentSrv: any
+    private uiSegmentSrv: any,
+    private $rootScope: GrafanaRootScope
   ) {
     super($scope, $injector);
     this.target = this.target;
@@ -43,7 +53,15 @@ export class SeraphQueryCtrl extends QueryCtrl {
       { text: 'Table', value: 'table' },
       { text: 'Logs', value: 'logs' },
     ];
-    console.log(123, this.target);
+
+    console.log('this.queryModel', this.queryModel);
+
+    this.getSerapMonitor();
+
+    // this.monitorType = [];
+    // this.monitorGroup = [{ text: 'JVM', value: 'jvm' }];
+    // this.monitorMetric = [{ text: 'jvm_memery_usage', value: 'jvm_memery_usage' }];
+    // this.monitorFields = [{ text: 'jvm_memery_usage', value: 'jvm_memery_usage' }];
 
     this.policySegment = uiSegmentSrv.newSegment(this.target.policy);
 
@@ -353,6 +371,9 @@ export class SeraphQueryCtrl extends QueryCtrl {
       .catch(this.handleQueryError);
   }
 
+  tagSegmentUpdated2(segment: any, $index: any) {
+    this.panelCtrl.refresh();
+  }
   tagSegmentUpdated(segment: { value: any; type: string; cssClass: string }, index: number) {
     this.tagSegments[index] = segment;
 
@@ -423,5 +444,98 @@ export class SeraphQueryCtrl extends QueryCtrl {
       return '=';
     }
     return null;
+  }
+
+  ///
+  monitorTypeChanged() {
+    const monitorType = this.target.monitorType;
+    this.getSerapMonitorGroup(monitorType);
+  }
+
+  monitorGroupChanged() {
+    const monitorType = this.target.monitorType;
+    const monitorGroup = this.target.monitorGroup;
+    this.getSerapMonitorMetric(monitorType, monitorGroup);
+  }
+
+  monitorMetricChanged() {
+    this.$rootScope.appEvent(seraphSelectUpdated);
+  }
+
+  // test
+
+  getSerapMonitor() {
+    return this.datasource
+      .getSeraphMonitor()
+      .then(data => {
+        this.serapMonitorDataSource = data;
+
+        const fields = Object.keys(data);
+        this.monitorType = fields.map(f => ({ text: f, value: f }));
+
+        if (this.target.monitorGroup) {
+          this.getSerapMonitorGroup(this.target.monitorType);
+        }
+
+        if (this.target.measurement) {
+          this.getSerapMonitorMetric(this.target.monitorType, this.target.monitorGroup);
+          this.$rootScope.appEvent(seraphSelectUpdated);
+        }
+      })
+      .catch(() => {});
+  }
+
+  getSerapMonitorGroup(monitorType: any) {
+    const data = this.serapMonitorDataSource[monitorType];
+    const fields = Object.keys(data);
+    this.monitorGroup = fields.map(f => ({ text: f, value: f }));
+  }
+
+  getSerapMonitorMetric(monitorType: any, monitorGroup: any) {
+    if (monitorType && monitorGroup) {
+      const data = this.serapMonitorDataSource[monitorType][monitorGroup];
+      const fields = Object.keys(data);
+      this.monitorMetric = fields.map(f => ({ text: f, value: f }));
+    }
+  }
+
+  getSerapMonitorFiled() {
+    if (this.serapMonitorDataSource) {
+      const monitorType = this.target.monitorType;
+      const monitorGroup = this.target.monitorGroup;
+      const measurement = this.target.measurement;
+
+      if (monitorType && monitorGroup && measurement) {
+        const data = this.serapMonitorDataSource[monitorType][monitorGroup][measurement].filed;
+        return data.map((f: any) => ({ text: f, value: f }));
+      }
+    }
+
+    return [];
+  }
+
+  getSerapMonitorTags() {
+    if (this.serapMonitorDataSource) {
+      const monitorType = this.target.monitorType;
+      const monitorGroup = this.target.monitorGroup;
+      const measurement = this.target.measurement;
+
+      if (monitorType && monitorGroup && measurement) {
+        const data = this.serapMonitorDataSource[monitorType][monitorGroup][measurement].tag;
+
+        return data.map((f: any) => ({ text: f, value: f }));
+      }
+    }
+
+    return [];
+  }
+
+  addGroup() {
+    this.groupBySegment.value = 'tag()';
+    this.groupByAction();
+  }
+  addTag() {
+    this.target.tags.push({ condition: 'AND' });
+    this.panelCtrl.refresh();
   }
 }
