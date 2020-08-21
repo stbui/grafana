@@ -40,7 +40,6 @@ export class InfluxQueryCtrl extends QueryCtrl {
       { text: 'Table', value: 'table' },
       { text: 'Logs', value: 'logs' },
     ];
-    console.log(123, this.target);
 
     this.policySegment = uiSegmentSrv.newSegment(this.target.policy);
 

@@ -1,0 +1,19 @@
+{
+  "type": "datasource",
+  "name": "seraph-monitor-datasource",
+  "id": "seraph-monitor-datasource",
+  "metrics": true,
+  "annotations": true,
+  "queryOptions": {
+    "maxDataPoints": true
+  },
+  "info": {
+    "author": {
+      "name": "stbui"
+    },
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    }
+  }
+}
