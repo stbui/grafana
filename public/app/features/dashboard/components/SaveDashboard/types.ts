@@ -12,10 +12,12 @@ export interface SaveDashboardFormProps {
   onCancel: () => void;
   onSuccess: () => void;
   onSubmit?: (clone: any, options: SaveDashboardOptions, dashboard: DashboardModel) => Promise<any>;
+  seraph?: any;
 }
 
 export interface SaveDashboardModalProps {
   dashboard: DashboardModel;
   onDismiss: () => void;
   onSaveSuccess?: () => void;
+  seraph?: any;
 }

@@ -6,7 +6,12 @@ import { SaveDashboardErrorProxy } from './SaveDashboardErrorProxy';
 import { useDashboardSave } from './useDashboardSave';
 import { SaveDashboardModalProps } from './types';
 
-export const SaveDashboardModal: React.FC<SaveDashboardModalProps> = ({ dashboard, onDismiss, onSaveSuccess }) => {
+export const SaveDashboardModal: React.FC<SaveDashboardModalProps> = ({
+  seraph,
+  dashboard,
+  onDismiss,
+  onSaveSuccess,
+}) => {
   const { state, onDashboardSave } = useDashboardSave(dashboard);
   const [dashboardSaveModelClone, setDashboardSaveModelClone] = useState();
 
@@ -23,7 +28,7 @@ export const SaveDashboardModal: React.FC<SaveDashboardModalProps> = ({ dashboar
       {!state.error && (
         <Modal
           isOpen={true}
-          title="Save dashboard"
+          title="保存"
           icon="copy"
           onDismiss={onDismiss}
           className={css`
@@ -31,6 +36,7 @@ export const SaveDashboardModal: React.FC<SaveDashboardModalProps> = ({ dashboar
           `}
         >
           <SaveDashboardForm
+            seraph={seraph}
             dashboard={dashboard}
             onCancel={onDismiss}
             onSuccess={() => {

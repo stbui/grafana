@@ -8,7 +8,7 @@ import { SaveDashboardModalProps } from './types';
 
 export const SaveDashboardAsModal: React.FC<SaveDashboardModalProps & {
   isNew?: boolean;
-}> = ({ dashboard, onDismiss, isNew }) => {
+}> = ({ seraph, dashboard, onDismiss, isNew }) => {
   const { state, onDashboardSave } = useDashboardSave(dashboard);
   const [dashboardSaveModelClone, setDashboardSaveModelClone] = useState();
   return (
@@ -24,7 +24,7 @@ export const SaveDashboardAsModal: React.FC<SaveDashboardModalProps & {
       {!state.error && (
         <Modal
           isOpen={true}
-          title="Save dashboard as..."
+          title="保存"
           icon="copy"
           onDismiss={onDismiss}
           className={css`
@@ -32,6 +32,7 @@ export const SaveDashboardAsModal: React.FC<SaveDashboardModalProps & {
           `}
         >
           <SaveDashboardAsForm
+            seraph={seraph}
             dashboard={dashboard}
             onCancel={onDismiss}
             onSuccess={onDismiss}

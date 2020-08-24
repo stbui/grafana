@@ -34,6 +34,7 @@ import { cleanUpDashboardAndVariables } from '../state/actions';
 import { cancelVariables } from '../../variables/state/actions';
 
 export interface Props {
+  seraph?: any;
   urlUid?: string;
   urlSlug?: string;
   urlType?: string;
@@ -286,6 +287,7 @@ export class DashboardPage extends PureComponent<Props, State> {
       inspectTab,
       isPanelEditorOpen,
       updateLocation,
+      seraph,
     } = this.props;
 
     const { editPanel, viewPanel, scrollTop, updateScrollTop } = this.state;
@@ -303,7 +305,13 @@ export class DashboardPage extends PureComponent<Props, State> {
 
     return (
       <div className="dashboard-container">
-        <DashNav dashboard={dashboard} isFullscreen={!!viewPanel} $injector={$injector} onAddPanel={this.onAddPanel} />
+        <DashNav
+          seraph={seraph}
+          dashboard={dashboard}
+          isFullscreen={!!viewPanel}
+          $injector={$injector}
+          onAddPanel={this.onAddPanel}
+        />
 
         <div className="dashboard-scroll">
           <CustomScrollbar
@@ -337,6 +345,7 @@ export class DashboardPage extends PureComponent<Props, State> {
 }
 
 export const mapStateToProps = (state: StoreState) => ({
+  seraph: state.location.query.seraph,
   urlUid: state.location.routeParams.uid,
   urlSlug: state.location.routeParams.slug,
   urlType: state.location.routeParams.type,

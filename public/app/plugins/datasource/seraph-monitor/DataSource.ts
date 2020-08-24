@@ -98,8 +98,6 @@ export class DataSource extends DataSourceWithBackend {
 
     // const adhocFilters = (templateSrv as any).getAdhocFilters(this.name);
     allQueries = templateSrv.replace(allQueries, scopedVars);
-    // const a = templateSrv.replace('A/^$groupby$/B', { text: '2', value: '1' }, 'regex');
-    console.log(scopedVars);
 
     scopedVars.timeFilter = { value: timeFilter };
 
@@ -210,7 +208,7 @@ export class DataSource extends DataSourceWithBackend {
     if (method === 'POST') {
       req.headers['Content-type'] = 'application/x-www-form-urlencoded';
     }
-    console.log(req);
+
     return this.backendSrv.datasourceRequest(req).then(
       (result: any) => {
         const { data } = result;

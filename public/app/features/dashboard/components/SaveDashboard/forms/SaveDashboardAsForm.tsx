@@ -4,6 +4,7 @@ import { DashboardModel, PanelModel } from 'app/features/dashboard/state';
 import { FolderPicker } from 'app/core/components/Select/FolderPicker';
 import { SaveDashboardFormProps } from '../types';
 import validationSrv from 'app/features/manage-dashboards/services/ValidationSrv';
+import { roles, saveToSeraph } from './seraph';
 
 interface SaveDashboardAsFormDTO {
   title: string;
@@ -11,23 +12,6 @@ interface SaveDashboardAsFormDTO {
   copyTags: boolean;
   role?: any;
 }
-
-const roles = [
-  { label: '个人', value: '1' },
-  { label: '部门', value: '2' },
-  { label: '公司', value: '3' },
-];
-
-const saveToSeraph = (params: any) => {
-  const url = '/dashboard/create';
-  fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(params),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-};
 
 const getSaveAsDashboardClone = (dashboard: DashboardModel) => {
   const clone: any = dashboard.getSaveModelClone();
@@ -53,6 +37,7 @@ const getSaveAsDashboardClone = (dashboard: DashboardModel) => {
 };
 
 export const SaveDashboardAsForm: React.FC<SaveDashboardFormProps & { isNew?: boolean }> = ({
+  seraph,
   dashboard,
   onSubmit,
   onCancel,
@@ -65,6 +50,7 @@ export const SaveDashboardAsForm: React.FC<SaveDashboardFormProps & { isNew?: bo
       title: dashboard.meta.folderTitle,
     },
     copyTags: false,
+    role: '1',
   };
 
   const validateDashboardName = (getFormValues: () => SaveDashboardAsFormDTO) => async (dashboardName: string) => {
@@ -92,19 +78,27 @@ export const SaveDashboardAsForm: React.FC<SaveDashboardFormProps & { isNew?: bo
         if (!data.copyTags) {
           clone.tags = [];
         }
-        console.log(data);
 
-        let d: any = dashboard;
-        d.seraph = {
+        let q = {};
+        try {
+          q = JSON.parse(seraph);
+        } catch (err) {
+          q = { q: seraph };
+        }
+
+        let dash: any = dashboard;
+        dash.seraph = {
           role: data.role,
+          ...q,
         };
+        clone.seraph = dash.seraph;
 
         const result = await onSubmit(
           clone,
           {
             folderId: data.$folder.id,
           },
-          d
+          dash
         );
 
         if (result.status === 'success') {
@@ -112,10 +106,8 @@ export const SaveDashboardAsForm: React.FC<SaveDashboardFormProps & { isNew?: bo
 
           const seraph: any = {
             role: data.role,
-            title: result.title,
-            id: result.id,
-            uid: result.uid,
-            url: result.url,
+            ...result,
+            ...q,
           };
 
           saveToSeraph(seraph);

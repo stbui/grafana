@@ -25,6 +25,7 @@ export interface OwnProps {
   isFullscreen: boolean;
   $injector: any;
   onAddPanel: () => void;
+  seraph: any;
 }
 
 interface DispatchProps {
@@ -216,7 +217,7 @@ class DashNav extends PureComponent<Props> {
   }
 
   renderRightActionsButton() {
-    const { dashboard, onAddPanel } = this.props;
+    const { seraph, dashboard, onAddPanel } = this.props;
     const { canSave, showSettings } = dashboard.meta;
     const { snapshot } = dashboard;
     const snapshotUrl = snapshot && snapshot.originalUrl;
@@ -245,6 +246,7 @@ class DashNav extends PureComponent<Props> {
                 showModal(SaveDashboardModalProxy, {
                   dashboard,
                   onDismiss: hideModal,
+                  seraph,
                 });
               }}
             />

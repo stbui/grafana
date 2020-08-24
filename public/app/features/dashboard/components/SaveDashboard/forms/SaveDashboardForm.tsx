@@ -3,25 +3,15 @@ import React from 'react';
 import { Button, HorizontalGroup, Form, Field, InputControl, RadioButtonGroup } from '@grafana/ui';
 
 import { SaveDashboardFormProps } from '../types';
+import { roles, saveToSeraph } from './seraph';
 
-const saveToSeraph = (params: any) => {
-  const url = '/dashboard/create';
-  fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(params),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-};
-
-const roles = [
-  { label: '个人', value: '1' },
-  { label: '部门', value: '2' },
-  { label: '公司', value: '3' },
-];
-
-export const SaveDashboardForm: React.FC<SaveDashboardFormProps> = ({ dashboard, onCancel, onSuccess, onSubmit }) => {
+export const SaveDashboardForm: React.FC<SaveDashboardFormProps> = ({
+  seraph,
+  dashboard,
+  onCancel,
+  onSuccess,
+  onSubmit,
+}) => {
   const defaultValues = {
     role: dashboard.seraph.role,
   };
@@ -31,26 +21,32 @@ export const SaveDashboardForm: React.FC<SaveDashboardFormProps> = ({ dashboard,
       return;
     }
 
-    let d: any = dashboard;
-    d.seraph = {
+    let q = {};
+    try {
+      q = JSON.parse(seraph);
+    } catch (err) {
+      q = { q: seraph };
+    }
+
+    let dash: any = dashboard;
+    dash.seraph = {
       ...dashboard.seraph,
       role: data.role,
+      ...q,
     };
 
-    const result = await onSubmit(dashboard.getSaveModelClone(data), data, d);
+    const result = await onSubmit(dashboard.getSaveModelClone(data), data, dash);
     if (result.status === 'success') {
       onSuccess();
       // callback
 
-      const seraph: any = {
+      const params: any = {
         role: data.role,
-        title: result.title,
-        id: result.id,
-        uid: result.uid,
-        url: result.url,
+        ...result,
+        ...q,
       };
 
-      saveToSeraph(seraph);
+      saveToSeraph(params);
     }
   };
 
