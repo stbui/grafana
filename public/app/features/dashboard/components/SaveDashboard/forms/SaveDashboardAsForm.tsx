@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, HorizontalGroup, Input, Switch, Form, Field, InputControl } from '@grafana/ui';
+import { Button, HorizontalGroup, Input, Switch, Form, Field, InputControl, RadioButtonGroup } from '@grafana/ui';
 import { DashboardModel, PanelModel } from 'app/features/dashboard/state';
 import { FolderPicker } from 'app/core/components/Select/FolderPicker';
 import { SaveDashboardFormProps } from '../types';
@@ -9,7 +9,25 @@ interface SaveDashboardAsFormDTO {
   title: string;
   $folder: { id?: number; title?: string };
   copyTags: boolean;
+  role?: any;
 }
+
+const roles = [
+  { label: '个人', value: '1' },
+  { label: '部门', value: '2' },
+  { label: '公司', value: '3' },
+];
+
+const saveToSeraph = (params: any) => {
+  const url = '/dashboard/create';
+  fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(params),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
 
 const getSaveAsDashboardClone = (dashboard: DashboardModel) => {
   const clone: any = dashboard.getSaveModelClone();
@@ -74,23 +92,39 @@ export const SaveDashboardAsForm: React.FC<SaveDashboardFormProps & { isNew?: bo
         if (!data.copyTags) {
           clone.tags = [];
         }
+        console.log(data);
+
+        let d: any = dashboard;
+        d.seraph = {
+          role: data.role,
+        };
 
         const result = await onSubmit(
           clone,
           {
             folderId: data.$folder.id,
           },
-          dashboard
+          d
         );
 
         if (result.status === 'success') {
           onSuccess();
+
+          const seraph: any = {
+            role: data.role,
+            title: result.title,
+            id: result.id,
+            uid: result.uid,
+            url: result.url,
+          };
+
+          saveToSeraph(seraph);
         }
       }}
     >
       {({ register, control, errors, getValues }) => (
         <>
-          <Field label="Dashboard name" invalid={!!errors.title} error={errors.title?.message}>
+          <Field label="Dashboard 名称" invalid={!!errors.title} error={errors.title?.message}>
             <Input
               name="title"
               ref={register({
@@ -100,7 +134,7 @@ export const SaveDashboardAsForm: React.FC<SaveDashboardFormProps & { isNew?: bo
               autoFocus
             />
           </Field>
-          <Field label="Folder">
+          <Field label="目录">
             <InputControl
               as={FolderPicker}
               control={control}
@@ -112,15 +146,17 @@ export const SaveDashboardAsForm: React.FC<SaveDashboardFormProps & { isNew?: bo
               useNewForms
             />
           </Field>
-          <Field label="Copy tags">
+          <Field label="复制 tags">
             <Switch name="copyTags" ref={register} />
           </Field>
+
+          <Field label="权限设置">
+            <InputControl as={RadioButtonGroup} control={control} options={roles} name="role" />
+          </Field>
           <HorizontalGroup>
-            <Button type="submit" aria-label="Save dashboard button">
-              Save
-            </Button>
+            <Button type="submit">保存</Button>
             <Button variant="secondary" onClick={onCancel}>
-              Cancel
+              取消
             </Button>
           </HorizontalGroup>
         </>

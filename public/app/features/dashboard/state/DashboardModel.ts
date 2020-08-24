@@ -73,6 +73,7 @@ export class DashboardModel {
   panels: PanelModel[];
   panelInEdit?: PanelModel;
   panelInView?: PanelModel;
+  seraph?: any;
 
   // ------------------
   // not persisted
@@ -123,6 +124,7 @@ export class DashboardModel {
     this.links = data.links || [];
     this.gnetId = data.gnetId || null;
     this.panels = _.map(data.panels || [], (panelData: any) => new PanelModel(panelData));
+    this.seraph = data.seraph || {};
 
     this.resetOriginalVariables(true);
     this.resetOriginalTime();
