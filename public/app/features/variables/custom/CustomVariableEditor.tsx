@@ -41,9 +41,9 @@ class CustomVariableEditorUnconnected extends PureComponent<Props> {
     return (
       <>
         <div className="gf-form-group">
-          <h5 className="section-heading">Custom Options</h5>
+          <h5 className="section-heading">自定义设置</h5>
           <div className="gf-form">
-            <span className="gf-form-label width-14">Values separated by comma</span>
+            <span className="gf-form-label width-14">用逗号分隔的值</span>
             <input
               type="text"
               className="gf-form-input"

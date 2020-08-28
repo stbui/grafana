@@ -2,8 +2,8 @@ import React, { ChangeEvent, PureComponent } from 'react';
 import { InlineFormLabel, LegacyForms } from '@grafana/ui';
 import { selectors } from '@grafana/e2e-selectors';
 
-// import templateSrv from '../../templating/template_srv';
-// import { SelectionOptionsEditor } from '../editor/SelectionOptionsEditor';
+import templateSrv from '../../templating/template_srv';
+import { SelectionOptionsEditor } from '../editor/SelectionOptionsEditor';
 import { QueryVariableModel, VariableRefresh, VariableSort, VariableWithMultiSupport } from '../types';
 import { QueryVariableEditorState } from './reducer';
 import { changeQueryVariableDataSource, changeQueryVariableQuery, initQueryVariableEditor } from './actions';
@@ -14,7 +14,6 @@ import { StoreState } from '../../../types';
 import { connectWithStore } from '../../../core/utils/connectWithReduxStore';
 import { toVariableIdentifier } from '../state/types';
 import { changeVariableMultiValue } from '../state/actions';
-import { SeraphQueryEditor } from './SeraphQueryEditor';
 
 const { Switch } = LegacyForms;
 
@@ -47,7 +46,6 @@ export class QueryVariableEditorUnConnected extends PureComponent<Props, State> 
   };
 
   async componentDidMount() {
-    this.props.onPropChange({ propName: 'datasource', propValue: 'seraph-monitor-datasource' });
     await this.props.initQueryVariableEditor(toVariableIdentifier(this.props.variable));
   }
 
@@ -119,12 +117,12 @@ export class QueryVariableEditorUnConnected extends PureComponent<Props, State> 
   };
 
   render() {
-    // const VariableQueryEditor = this.props.editor.extended?.VariableQueryEditor;
+    const VariableQueryEditor = this.props.editor.extended?.VariableQueryEditor;
     return (
       <>
         <div className="gf-form-group">
-          <h5 className="section-heading">查询选选项</h5>
-          <div className="gf-form-inline" style={{ display: 'none' }}>
+          <h5 className="section-heading">Query Options</h5>
+          <div className="gf-form-inline">
             <div className="gf-form max-width-21">
               <span className="gf-form-label width-10">Data source</span>
               <div className="gf-form-select-wrapper max-width-14">
@@ -147,7 +145,7 @@ export class QueryVariableEditorUnConnected extends PureComponent<Props, State> 
               </div>
             </div>
 
-            {/* <div className="gf-form max-width-22">
+            <div className="gf-form max-width-22">
               <InlineFormLabel width={10} tooltip={'When to update the values of this variable.'}>
                 Refresh
               </InlineFormLabel>
@@ -169,49 +167,19 @@ export class QueryVariableEditorUnConnected extends PureComponent<Props, State> 
                   </option>
                 </select>
               </div>
-            </div> */}
+            </div>
           </div>
 
-          {/* {VariableQueryEditor && this.props.editor.extended?.dataSource && (
+          {VariableQueryEditor && this.props.editor.extended?.dataSource && (
             <VariableQueryEditor
               datasource={this.props.editor.extended?.dataSource}
               query={this.props.variable.query}
               templateSrv={templateSrv}
               onChange={this.onQueryChange}
             />
-          )} */}
+          )}
 
-          <SeraphQueryEditor
-            datasource={this.props.editor.extended?.dataSource}
-            query={this.props.variable.query}
-            onChange={this.onQueryChange}
-          />
-
-          <div className="gf-form max-width-22">
-            <InlineFormLabel width={6} tooltip={'When to update the values of this variable.'}>
-              刷新频率
-            </InlineFormLabel>
-            <div className="gf-form-select-wrapper width-15">
-              <select
-                className="gf-form-input"
-                value={this.props.variable.refresh}
-                onChange={this.onRefreshChange}
-                aria-label={selectors.pages.Dashboard.Settings.Variables.Edit.QueryVariable.queryOptionsRefreshSelect}
-              >
-                <option label="从不" value={VariableRefresh.never}>
-                  从不
-                </option>
-                <option label="页面加载" value={VariableRefresh.onDashboardLoad}>
-                  页面加载
-                </option>
-                <option label="时间范围切换" value={VariableRefresh.onTimeRangeChanged}>
-                  时间范围切换
-                </option>
-              </select>
-            </div>
-          </div>
-
-          <div className="gf-form" style={{ display: 'none' }}>
+          <div className="gf-form">
             <InlineFormLabel
               width={10}
               tooltip={'Optional, if you want to extract part of a series name or metric node segment.'}
@@ -228,7 +196,7 @@ export class QueryVariableEditorUnConnected extends PureComponent<Props, State> 
               aria-label={selectors.pages.Dashboard.Settings.Variables.Edit.QueryVariable.queryOptionsRegExInput}
             />
           </div>
-          <div className="gf-form max-width-21" style={{ display: 'none' }}>
+          <div className="gf-form max-width-21">
             <InlineFormLabel width={10} tooltip={'How to sort the values of this variable.'}>
               Sort
             </InlineFormLabel>
@@ -271,13 +239,13 @@ export class QueryVariableEditorUnConnected extends PureComponent<Props, State> 
           </div>
         </div>
 
-        {/* <SelectionOptionsEditor
+        <SelectionOptionsEditor
           variable={this.props.variable}
           onPropChange={this.onSelectionOptionsChange}
           onMultiChanged={this.props.changeVariableMultiValue}
-        /> */}
+        />
 
-        <div className="gf-form-group" style={{ display: 'none' }}>
+        <div className="gf-form-group">
           <h5>Value groups/tags (Experimental feature)</h5>
           <div
             aria-label={selectors.pages.Dashboard.Settings.Variables.Edit.QueryVariable.valueGroupsTagsEnabledSwitch}

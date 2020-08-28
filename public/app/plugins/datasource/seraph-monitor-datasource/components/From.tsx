@@ -31,7 +31,7 @@ export const getSerapMonitorMetric: any = (data: any, monitorType: any, monitorG
   const value = data[monitorType][monitorGroup];
   const fields = Object.keys(value);
 
-  return fields.map(f => ({ label: f, value: f }));
+  return fields.map(f => ({ label: value[f].metric_comment, value: f }));
 };
 
 export default ({ defaultValue, data, onChange }: any) => {

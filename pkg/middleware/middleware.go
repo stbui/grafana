@@ -327,5 +327,5 @@ func AddNoCacheHeaders(w macaron.ResponseWriter) {
 }
 
 func AddXFrameOptionsDenyHeader(w macaron.ResponseWriter) {
-	w.Header().Add("X-Frame-Options", "deny")
+	// w.Header().Add("X-Frame-Options", "deny")
 }

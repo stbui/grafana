@@ -54,8 +54,6 @@ export class SeraphQueryCtrl extends QueryCtrl {
       { text: 'Logs', value: 'logs' },
     ];
 
-    console.log('this.queryModel', this.queryModel);
-
     this.getSerapMonitor();
 
     // this.monitorType = [];

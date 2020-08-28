@@ -4,7 +4,7 @@ export const getVariables = () => {
   const templateSrv = getTemplateSrv();
   const variables = templateSrv.getVariables();
   const segments = [];
-  console.log(variables);
+
   for (const variable of variables) {
     segments.unshift('/^$' + variable.name + '$/');
   }

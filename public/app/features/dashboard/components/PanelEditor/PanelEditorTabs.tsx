@@ -44,18 +44,20 @@ export const PanelEditorTabs: React.FC<PanelEditorTabsProps> = ({ panel, dashboa
   return (
     <div className={styles.wrapper}>
       <TabsBar className={styles.tabBar}>
-        {tabs.map(tab => {
-          return (
-            <Tab
-              key={tab.id}
-              label={tab.text}
-              active={tab.active}
-              onChangeTab={() => onChangeTab(tab)}
-              icon={tab.icon as IconName}
-              counter={getCounter(tab)}
-            />
-          );
-        })}
+        {tabs
+          .filter(tab => tab.id === 'query')
+          .map(tab => {
+            return (
+              <Tab
+                key={tab.id}
+                label={tab.text}
+                active={tab.active}
+                onChangeTab={() => onChangeTab(tab)}
+                icon={tab.icon as IconName}
+                counter={getCounter(tab)}
+              />
+            );
+          })}
       </TabsBar>
       <TabContent className={styles.tabContent}>
         {activeTab.id === PanelEditorTabId.Query && <QueriesTab panel={panel} dashboard={dashboard} />}

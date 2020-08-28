@@ -64,41 +64,41 @@ export class SettingsCtrl {
 
     if (this.dashboard.meta.canEdit) {
       this.sections.push({
-        title: 'General',
+        title: '基本',
         id: 'settings',
         icon: 'sliders-v-alt',
       });
+      // this.sections.push({
+      //   title: 'Annotations',
+      //   id: 'annotations',
+      //   icon: 'comment-alt',
+      // });
       this.sections.push({
-        title: 'Annotations',
-        id: 'annotations',
-        icon: 'comment-alt',
-      });
-      this.sections.push({
-        title: 'Variables',
+        title: '变量',
         id: 'templating',
         icon: 'calculator-alt',
       });
-      this.sections.push({
-        title: 'Links',
-        id: 'links',
-        icon: 'link',
-      });
+      // this.sections.push({
+      //   title: 'Links',
+      //   id: 'links',
+      //   icon: 'link',
+      // });
     }
 
     if (this.dashboard.id && this.dashboard.meta.canSave) {
       this.sections.push({
-        title: 'Versions',
+        title: '版本',
         id: 'versions',
         icon: 'history',
       });
     }
 
     if (this.dashboard.id && this.dashboard.meta.canAdmin) {
-      this.sections.push({
-        title: 'Permissions',
-        id: 'permissions',
-        icon: 'lock',
-      });
+      // this.sections.push({
+      //   title: 'Permissions',
+      //   id: 'permissions',
+      //   icon: 'lock',
+      // });
     }
 
     if (this.dashboard.meta.canMakeEditable) {

@@ -1,58 +1,59 @@
 <aside class="dashboard-settings__aside">
-  <a href="{{::section.url}}"
-     class="dashboard-settings__nav-item"
-     ng-class="{active: ctrl.viewId === section.id}"
-     ng-repeat="section in ctrl.sections"
-     aria-label="{{ctrl.selectors.sectionItems(section.title)}}">
+  <a href="{{::section.url}}" class="dashboard-settings__nav-item" ng-class="{active: ctrl.viewId === section.id}"
+    ng-repeat="section in ctrl.sections" aria-label="{{ctrl.selectors.sectionItems(section.title)}}">
     <icon name="'{{::section.icon}}'" style="margin-right: 4px;"></icon>
     {{::section.title}}
   </a>
 
   <div class="dashboard-settings__aside-actions">
     <div ng-show="ctrl.canSave">
-      <save-dashboard-button getDashboard="ctrl.getDashboard" aria-label="Dashboard settings aside actions Save button" />
+      <save-dashboard-button getDashboard="ctrl.getDashboard"
+        aria-label="Dashboard settings aside actions Save button" />
     </div>
     <div ng-show="ctrl.canSaveAs">
-      <save-dashboard-as-button getDashboard="ctrl.getDashboard" aria-label="Dashboard settings aside actions Save as button" variant="'secondary'" />
+      <save-dashboard-as-button getDashboard="ctrl.getDashboard"
+        aria-label="Dashboard settings aside actions Save as button" variant="'secondary'" />
     </div>
   </div>
 </aside>
 
 <div class="dashboard-settings__content" ng-if="ctrl.viewId === 'settings'">
   <h3 class="dashboard-settings__header" aria-label="{{::ctrl.selectors.title}}">
-    General
+    基本信息
   </h3>
 
   <div class="gf-form-group">
     <div class="gf-form">
-      <label class="gf-form-label width-7">Name</label>
+      <label class="gf-form-label width-7">名称</label>
       <input type="text" class="gf-form-input width-30" ng-model='ctrl.dashboard.title'></input>
     </div>
     <div class="gf-form">
-      <label class="gf-form-label width-7">Description</label>
+      <label class="gf-form-label width-7">描述</label>
       <input type="text" class="gf-form-input width-30" ng-model='ctrl.dashboard.description'></input>
     </div>
-    <div class="gf-form">
+    <!-- <div class="gf-form">
       <label class="gf-form-label width-7">
         Tags
         <info-popover mode="right-normal">Press enter to add a tag</info-popover>
       </label>
       <bootstrap-tagsinput ng-model="ctrl.dashboard.tags" tagclass="label label-tag" placeholder="add tags">
       </bootstrap-tagsinput>
-    </div>
-    <folder-picker initial-title="ctrl.dashboard.meta.folderTitle" initial-folder-id="ctrl.dashboard.meta.folderId"
+    </div> -->
+    <!-- <folder-picker initial-title="ctrl.dashboard.meta.folderTitle" initial-folder-id="ctrl.dashboard.meta.folderId"
       on-change="ctrl.onFolderChange" enable-create-new="true" is-valid-selection="true" label-class="width-7"
       dashboard-id="ctrl.dashboard.id">
-    </folder-picker>
-    <gf-form-switch class="gf-form" label="Editable"
+    </folder-picker> -->
+    <gf-form-switch class="gf-form" label="启用"
       tooltip="Uncheck, then save and reload to disable all dashboard editing" checked="ctrl.dashboard.editable"
       label-class="width-7">
     </gf-form-switch>
   </div>
 
-  <time-picker-settings getDashboard="ctrl.getDashboard" onTimeZoneChange="ctrl.onTimeZoneChange" onRefreshIntervalChange="ctrl.onRefreshIntervalChange" onNowDelayChange="ctrl.onNowDelayChange" onHideTimePickerChange="ctrl.onHideTimePickerChange"></time-picker-settings>
+  <!-- <time-picker-settings getDashboard="ctrl.getDashboard" onTimeZoneChange="ctrl.onTimeZoneChange"
+    onRefreshIntervalChange="ctrl.onRefreshIntervalChange" onNowDelayChange="ctrl.onNowDelayChange"
+    onHideTimePickerChange="ctrl.onHideTimePickerChange"></time-picker-settings> -->
 
-  <h5 class="section-heading">Panel Options</h5>
+  <!-- <h5 class="section-heading">Panel Options</h5>
   <div class="gf-form">
     <label class="gf-form-label width-11">
       Graph Tooltip
@@ -64,11 +65,11 @@
       <select ng-model="ctrl.dashboard.graphTooltip" class='gf-form-input'
         ng-options="f.value as f.text for f in [{value: 0, text: 'Default'}, {value: 1, text: 'Shared crosshair'},{value: 2, text: 'Shared Tooltip'}]"></select>
     </div>
-  </div>
+  </div> -->
   <div class="gf-form-button-row">
     <button class="btn btn-danger" ng-click="ctrl.deleteDashboard()" ng-show="ctrl.canDelete"
       aria-label="Dashboard settings page delete dashboard button">
-      Delete Dashboard
+      删除 Dashboard
     </button>
   </div>
 </div>

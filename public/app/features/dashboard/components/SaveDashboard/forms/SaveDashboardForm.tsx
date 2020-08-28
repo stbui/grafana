@@ -44,6 +44,8 @@ export const SaveDashboardForm: React.FC<SaveDashboardFormProps> = ({
         role: data.role,
         ...result,
         ...q,
+        // gengxing
+        action: 1,
       };
 
       saveToSeraph(params);

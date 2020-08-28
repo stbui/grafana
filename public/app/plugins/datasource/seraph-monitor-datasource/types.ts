@@ -17,6 +17,7 @@ export interface InfluxOptions extends DataSourceJsonData {
   maxSeries?: number;
 
   seraphApi?: string;
+  datasource?: string;
 }
 
 export interface InfluxSecureJsonData {

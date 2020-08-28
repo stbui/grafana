@@ -35,7 +35,7 @@ export const SelectionOptionsEditor: FunctionComponent<SelectionOptionsEditorPro
     [props.onPropChange]
   );
   return (
-    <div className="section gf-form-group">
+    <div className="section gf-form-group" style={{ display: 'none' }}>
       <h5 className="section-heading">Selection Options</h5>
       <div className="section">
         <div aria-label={selectors.pages.Dashboard.Settings.Variables.Edit.General.selectionOptionsMultiSwitch}>

@@ -204,6 +204,18 @@ export class ConfigEditor extends PureComponent<Props> {
               </div>
             </div>
           </div>
+          <div className="gf-form-inline">
+            <div className="gf-form">
+              <InlineFormLabel className="width-10">data source</InlineFormLabel>
+              <div className="width-20">
+                <Input
+                  className="width-20"
+                  value={options.jsonData.datasource || ''}
+                  onChange={onUpdateDatasourceJsonDataOption(this.props, 'datasource')}
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         <h3 className="page-heading">InfluxDB Details</h3>

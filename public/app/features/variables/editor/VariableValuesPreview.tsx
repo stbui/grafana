@@ -24,7 +24,7 @@ export const VariableValuesPreview: React.FunctionComponent<VariableValuesPrevie
 
   return (
     <div className="gf-form-group">
-      <h5>Preview of values</h5>
+      <h5>预览值</h5>
       <div className="gf-form-inline">
         {previewOptions.map((o, index) => (
           <div className="gf-form" key={`${o.value}-${index}`}>

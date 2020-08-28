@@ -77,8 +77,8 @@ export class VariableEditorList extends PureComponent<Props> {
               >
                 <thead>
                   <tr>
-                    <th>Variable</th>
-                    <th>Definition</th>
+                    <th>名称</th>
+                    <th>定义</th>
                     <th colSpan={5} />
                   </tr>
                 </thead>

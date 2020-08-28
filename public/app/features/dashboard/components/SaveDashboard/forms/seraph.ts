@@ -1,16 +1,15 @@
-export const saveToSeraph = (params: any) => {
-  const url = '/dashboard/create';
-  fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(params),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+import { getDatasourceSrv } from 'app/features/plugins/datasource_srv';
+
+export const saveToSeraph = async (params: any) => {
+  const dataSource: any = await getDatasourceSrv().get('seraph-monitor-datasource');
+  if (!dataSource.sendDashboardData) {
+    return;
+  }
+  dataSource.sendDashboardData(params);
 };
 
 export const roles = [
-  { label: '个人', value: '1' },
-  { label: '部门', value: '2' },
-  { label: '公司', value: '3' },
+  { label: '个人', value: 'P' },
+  { label: '部门', value: 'D' },
+  { label: '公司', value: 'C' },
 ];

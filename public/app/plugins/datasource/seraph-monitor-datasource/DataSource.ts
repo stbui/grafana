@@ -3,6 +3,7 @@ import { dateMath } from '@grafana/data';
 import { DataSourceWithBackend, getTemplateSrv } from '@grafana/runtime';
 import { Observable, from } from 'rxjs';
 import InfluxSeries from './influx_series';
+import ResponseParser from './response_parser';
 
 export class DataSource extends DataSourceWithBackend {
   instanceSettings: any;
@@ -13,9 +14,13 @@ export class DataSource extends DataSourceWithBackend {
   name: string;
   database: any;
   seraphApi: any;
+  datasource: any;
+  responseParser: any;
 
   constructor(instanceSettings: any, $q: any, backendSrv: any, templateSrv: any) {
     super(instanceSettings);
+    this.responseParser = new ResponseParser();
+
     this.instanceSettings = instanceSettings;
     this.backendSrv = backendSrv;
     this.urls = (instanceSettings.url ?? '').split(',').map((url: any) => {
@@ -26,8 +31,9 @@ export class DataSource extends DataSourceWithBackend {
     this.password = instanceSettings.password ?? '';
     // this.database = instanceSettings.database;
     this.database = 'k8s_metric';
-
+    console.log(instanceSettings);
     this.seraphApi = instanceSettings.jsonData.seraphApi;
+    this.datasource = instanceSettings.jsonData.datasource;
   }
 
   query(request: any): Observable<any> {
@@ -248,6 +254,36 @@ export class DataSource extends DataSourceWithBackend {
     );
   }
 
+  metricFindQuery(query: string, options?: any): any {
+    const [monitorType, monitorGroup, monitorMetric] = query.split(',');
+
+    const q = {
+      monitorType,
+      monitorGroup,
+      monitorMetric,
+    };
+
+    return this.getSeraphMonitor().then((data: any) => {
+      const fileds = data[q.monitorType][q.monitorGroup][q.monitorMetric].filed;
+
+      if (fileds) {
+        return fileds.map((filed: any) => ({ text: filed }));
+      }
+
+      return [];
+    });
+  }
+
+  sendDashboardData(data: any) {
+    const req = {
+      url: this.seraphApi + '/dashboard/create',
+      method: 'POST',
+      data: data,
+    };
+
+    return this.backendSrv.datasourceRequest(req);
+  }
+
   serializeParams(params: any) {
     if (!params) {
       return '';
@@ -268,45 +304,35 @@ export class DataSource extends DataSourceWithBackend {
 
   getSeraphMonitor() {
     const req = {
-      url: '',
+      url: this.seraphApi + '/v1/grafana/metric/list',
     };
-    return this.backendSrv.datasourceRequest(req).then(() => {
-      const test = {
-        k8sMetric: {
-          jvm监控: {
-            jvm: {
-              jvm_memery_usage: {
-                filed: ['filed1', 'filed2'],
-                tag: ['usage_app', 'usage_host', 'podName'],
-              },
-              jvm_gc_pause_seconds_count: {
-                filed: ['value', 'count'],
-                tag: ['count_app', 'host', 'podName'],
-              },
-            },
-          },
-          容器监控: {
-            k8s: {
-              k8s_node_avaliable: {
-                filed: ['value'],
-                tag: ['app', 'host', 'podName'],
-              },
-            },
-          },
-        },
-        metric_agg: {
-          日志监控: {
-            xxx: {
-              xxxyyy: {
-                filed: ['value'],
-                tag: ['app', 'host', 'podName'],
-              },
-            },
-          },
-        },
-      };
+    return this.backendSrv.datasourceRequest(req).then(
+      ({ data: { result }, code }: any) => {
+        if (this.datasource) {
+          return result[this.datasource];
+        }
 
-      return test.k8sMetric;
-    });
+        return result.k8sMetric;
+      },
+      (err: any) => {
+        if ((Number.isInteger(err.status) && err.status !== 0) || err.status >= 300) {
+          if (err.data && err.data.error) {
+            throw {
+              message: 'InfluxDB Error: ' + err.data.error,
+              data: err.data,
+              config: err.config,
+            };
+          } else {
+            throw {
+              message: 'Network Error: ' + err.statusText + '(' + err.status + ')',
+              data: err.data,
+              config: err.config,
+            };
+          }
+        } else {
+          throw err;
+        }
+      }
+    );
   }
 }

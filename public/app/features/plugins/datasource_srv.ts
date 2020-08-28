@@ -66,6 +66,7 @@ export class DatasourceSrv implements DataSourceService {
     }
 
     const dsConfig = config.datasources[name];
+    console.log(name, dsConfig);
     if (!dsConfig) {
       return Promise.reject({ message: `Datasource named ${name} was not found` });
     }

@@ -12,8 +12,6 @@ export class seraphGroupCtrl {
     const type = part.part.type;
     const segment = $scope.segment;
 
-    // console.log('seraphGroupCtrl', part);
-
     function addTypeahead(param: any, index: number) {
       if (!param.options && !param.dynamicLookup) {
         return;
@@ -27,7 +25,6 @@ export class seraphGroupCtrl {
       }
 
       if (type === 'tag') {
-        console.log('optionsoptionsoptionsoptionsoptions', $scope.getFields());
         $scope.options = $scope.getFields();
         $scope.option = part.params[index];
       }
@@ -48,8 +45,6 @@ export class seraphGroupCtrl {
 
     $scope.init = () => {
       _.each(partDef.params, (param: any, index: number) => {
-        console.log(param, index);
-
         $scope.optionChanged = () => {
           optionChanged(index);
         };
@@ -59,13 +54,11 @@ export class seraphGroupCtrl {
     };
 
     $scope.add = () => {
-      console.log('add');
       segment.value = 'tag()';
       $scope.onChange({ $event: { name: 'action' } });
     };
 
     $scope.remove = () => {
-      console.log('remvoe');
       $scope.handleEvent({ $event: { name: 'action' } });
     };
 

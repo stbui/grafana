@@ -50,7 +50,7 @@ export const SaveDashboardAsForm: React.FC<SaveDashboardFormProps & { isNew?: bo
       title: dashboard.meta.folderTitle,
     },
     copyTags: false,
-    role: '1',
+    role: 'P',
   };
 
   const validateDashboardName = (getFormValues: () => SaveDashboardAsFormDTO) => async (dashboardName: string) => {
@@ -108,6 +108,8 @@ export const SaveDashboardAsForm: React.FC<SaveDashboardFormProps & { isNew?: bo
             role: data.role,
             ...result,
             ...q,
+            // 创建
+            action: 0,
           };
 
           saveToSeraph(seraph);

@@ -1,14 +1,14 @@
 import { updateLocation } from 'app/core/actions';
 import { store } from 'app/store/store';
-import { AngularComponent, getDataSourceSrv, getLocationSrv } from '@grafana/runtime';
+import { AngularComponent, getLocationSrv } from '@grafana/runtime';
 import { PanelMenuItem } from '@grafana/data';
-import { copyPanel, duplicatePanel, removePanel, sharePanel } from 'app/features/dashboard/utils/panel';
+import { copyPanel, duplicatePanel, removePanel } from 'app/features/dashboard/utils/panel';
 import { PanelModel } from 'app/features/dashboard/state/PanelModel';
 import { DashboardModel } from 'app/features/dashboard/state/DashboardModel';
-import { contextSrv } from '../../../core/services/context_srv';
-import { navigateToExplore } from '../../explore/state/actions';
-import { getExploreUrl } from '../../../core/utils/explore';
-import { getTimeSrv } from '../services/TimeSrv';
+// import { contextSrv } from '../../../core/services/context_srv';
+// import { navigateToExplore } from '../../explore/state/actions';
+// import { getExploreUrl } from '../../../core/utils/explore';
+// import { getTimeSrv } from '../services/TimeSrv';
 import { PanelCtrl } from '../../panel/panel_ctrl';
 
 export function getPanelMenu(
@@ -40,10 +40,10 @@ export function getPanelMenu(
     );
   };
 
-  const onSharePanel = (event: React.MouseEvent<any>) => {
-    event.preventDefault();
-    sharePanel(dashboard, panel);
-  };
+  // const onSharePanel = (event: React.MouseEvent<any>) => {
+  //   event.preventDefault();
+  //   sharePanel(dashboard, panel);
+  // };
 
   const onInspectPanel = (tab?: string) => {
     getLocationSrv().update({
@@ -55,9 +55,9 @@ export function getPanelMenu(
     });
   };
 
-  const onMore = (event: React.MouseEvent<any>) => {
-    event.preventDefault();
-  };
+  // const onMore = (event: React.MouseEvent<any>) => {
+  //   event.preventDefault();
+  // };
 
   const onDuplicatePanel = (event: React.MouseEvent<any>) => {
     event.preventDefault();
@@ -74,11 +74,11 @@ export function getPanelMenu(
     removePanel(dashboard, panel, true);
   };
 
-  const onNavigateToExplore = (event: React.MouseEvent<any>) => {
-    event.preventDefault();
-    const openInNewWindow = event.ctrlKey || event.metaKey ? (url: string) => window.open(url) : undefined;
-    store.dispatch(navigateToExplore(panel, { getDataSourceSrv, getTimeSrv, getExploreUrl, openInNewWindow }) as any);
-  };
+  // const onNavigateToExplore = (event: React.MouseEvent<any>) => {
+  //   event.preventDefault();
+  //   const openInNewWindow = event.ctrlKey || event.metaKey ? (url: string) => window.open(url) : undefined;
+  //   store.dispatch(navigateToExplore(panel, { getDataSourceSrv, getTimeSrv, getExploreUrl, openInNewWindow }) as any);
+  // };
 
   const menu: PanelMenuItem[] = [];
 
@@ -100,21 +100,21 @@ export function getPanelMenu(
     });
   }
 
-  menu.push({
-    text: 'Share',
-    iconClassName: 'share-alt',
-    onClick: onSharePanel,
-    shortcut: 'p s',
-  });
+  // menu.push({
+  //   text: 'Share',
+  //   iconClassName: 'share-alt',
+  //   onClick: onSharePanel,
+  //   shortcut: 'p s',
+  // });
 
-  if (contextSrv.hasAccessToExplore() && !(panel.plugin && panel.plugin.meta.skipDataQuery)) {
-    menu.push({
-      text: 'Explore',
-      iconClassName: 'compass',
-      shortcut: 'x',
-      onClick: onNavigateToExplore,
-    });
-  }
+  // if (contextSrv.hasAccessToExplore() && !(panel.plugin && panel.plugin.meta.skipDataQuery)) {
+  //   menu.push({
+  //     text: 'Explore',
+  //     iconClassName: 'compass',
+  //     shortcut: 'x',
+  //     onClick: onNavigateToExplore,
+  //   });
+  // }
 
   const inspectMenu: PanelMenuItem[] = [];
 
@@ -138,14 +138,14 @@ export function getPanelMenu(
     onClick: (e: React.MouseEvent<any>) => onInspectPanel('json'),
   });
 
-  menu.push({
-    type: 'submenu',
-    text: 'Inspect',
-    iconClassName: 'info-circle',
-    onClick: (e: React.MouseEvent<any>) => onInspectPanel(),
-    shortcut: 'i',
-    subMenu: inspectMenu,
-  });
+  // menu.push({
+  //   type: 'submenu',
+  //   text: 'Inspect',
+  //   iconClassName: 'info-circle',
+  //   onClick: (e: React.MouseEvent<any>) => onInspectPanel(),
+  //   shortcut: 'i',
+  //   subMenu: inspectMenu,
+  // });
 
   const subMenu: PanelMenuItem[] = [];
 
@@ -185,15 +185,15 @@ export function getPanelMenu(
     }
   }
 
-  if (!panel.isEditing && subMenu.length) {
-    menu.push({
-      type: 'submenu',
-      text: 'More...',
-      iconClassName: 'cube',
-      subMenu,
-      onClick: onMore,
-    });
-  }
+  // if (!panel.isEditing && subMenu.length) {
+  //   menu.push({
+  //     type: 'submenu',
+  //     text: 'More...',
+  //     iconClassName: 'cube',
+  //     subMenu,
+  //     onClick: onMore,
+  //   });
+  // }
 
   if (dashboard.canEditPanel(panel) && !panel.isEditing) {
     menu.push({ type: 'divider', text: '' });

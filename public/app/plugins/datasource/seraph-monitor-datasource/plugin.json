@@ -2,11 +2,18 @@
   "type": "datasource",
   "name": "seraph-monitor-datasource",
   "id": "seraph-monitor-datasource",
+  "category": "tsdb",
+
+  "defaultMatchFormat": "regex values",
   "metrics": true,
+  "logs": true,
   "annotations": true,
+  "alerting": true,
+
   "queryOptions": {
-    "maxDataPoints": true
+    "minInterval": true
   },
+
   "info": {
     "author": {
       "name": "stbui"

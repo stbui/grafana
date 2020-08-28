@@ -114,7 +114,6 @@ export const QueryEditor = props => {
     const q = sqlBuilder(target);
     target.query = q;
 
-    console.log('onQuery', target);
     setSql(q);
 
     onChange(target);

@@ -199,10 +199,10 @@ class DashNav extends PureComponent<Props> {
                 </a>
               </>
             )}
-            <a onClick={this.onDashboardNameClick}>{dashboard.title}</a>
+            <span>{dashboard.title}</span>
           </div>
         </div>
-        <div className="navbar-buttons navbar-buttons--actions">{this.renderLeftActionsButton()}</div>
+        {/* <div className="navbar-buttons navbar-buttons--actions">{this.renderLeftActionsButton()}</div> */}
         <div className="navbar__spacer" />
       </>
     );
