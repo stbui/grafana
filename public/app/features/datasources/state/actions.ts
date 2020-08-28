@@ -86,7 +86,7 @@ export const testDataSource = (
     if (!dsApi.testDatasource) {
       return;
     }
-
+    console.log('dsApi', dsApi);
     dispatch(testDataSourceStarting());
 
     dependencies.getBackendSrv().withNoBackendCache(async () => {

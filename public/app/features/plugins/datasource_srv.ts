@@ -73,6 +73,7 @@ export class DatasourceSrv implements DataSourceService {
 
     try {
       const dsPlugin = await importDataSourcePlugin(dsConfig.meta);
+      console.log(dsPlugin, this.datasources);
       // check if its in cache now
       if (this.datasources[name]) {
         return this.datasources[name];

@@ -5,8 +5,9 @@ import { Observable, from } from 'rxjs';
 import InfluxSeries from './influx_series';
 import ResponseParser from './response_parser';
 
-export class DataSource extends DataSourceWithBackend {
+export default class SeraphDatasource extends DataSourceWithBackend {
   instanceSettings: any;
+  type: any;
   backendSrv: any;
   urls: string[];
   username: string;
@@ -22,6 +23,7 @@ export class DataSource extends DataSourceWithBackend {
     this.responseParser = new ResponseParser();
 
     this.instanceSettings = instanceSettings;
+    this.type = 'influxdb';
     this.backendSrv = backendSrv;
     this.urls = (instanceSettings.url ?? '').split(',').map((url: any) => {
       return url.trim();
@@ -334,5 +336,26 @@ export class DataSource extends DataSourceWithBackend {
         }
       }
     );
+  }
+
+  testDatasource() {
+    const query = 'SHOW RETENTION POLICIES on "k8s_metric"';
+
+    console.log(11111222223333333444444, this.instanceSettings);
+    return this._seriesQuery(query)
+      .then((res: any) => {
+        const error = _.get(res, 'results[0].error');
+        if (error) {
+          return { status: 'error', message: error };
+        }
+        return { status: 'success', message: 'Data source is working' };
+      })
+      .catch((err: any) => {
+        return { status: 'error', message: err.message };
+      });
+  }
+
+  annotationQuery() {
+    return Promise.resolve([]);
   }
 }

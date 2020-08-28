@@ -1,12 +1,9 @@
 // @ts-nocheck
 import React, { PureComponent, useEffect, useState } from 'react';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
-
-import Editor from '@monaco-editor/react';
-import { DataSource } from '../DataSource';
-import { InfluxQuery, InfluxOptions } from '../types';
 import { Select, LinkButton, InlineFormLabel } from '@grafana/ui';
-import { onChangeCascader } from '@grafana/ui/src/components/Cascader/optionMappings';
+
+import { InfluxQuery, InfluxOptions } from '../types';
 
 import From from './From';
 import SelectField from './SelectField';

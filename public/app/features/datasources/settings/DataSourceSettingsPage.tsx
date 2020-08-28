@@ -61,7 +61,7 @@ export class DataSourceSettingsPage extends PureComponent<Props> {
 
   onSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-
+    console.warn('onSubmit', this.props.dataSource);
     await this.props.updateDataSource({ ...this.props.dataSource });
 
     this.testDataSource();
