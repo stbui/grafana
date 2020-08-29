@@ -1,41 +1,54 @@
 import _ from 'lodash';
-import { dateMath } from '@grafana/data';
-import { DataSourceWithBackend, getTemplateSrv } from '@grafana/runtime';
-import { Observable, from } from 'rxjs';
+
+import { dateMath, DataSourceInstanceSettings } from '@grafana/data';
 import InfluxSeries from './influx_series';
 import ResponseParser from './response_parser';
+import { InfluxQuery, InfluxOptions, InfluxVersion } from './types';
+import { getBackendSrv, getTemplateSrv, DataSourceWithBackend } from '@grafana/runtime';
+import { Observable, from } from 'rxjs';
 
-export default class SeraphDatasource extends DataSourceWithBackend {
-  instanceSettings: any;
-  type: any;
-  backendSrv: any;
+export default class InfluxDatasource extends DataSourceWithBackend<InfluxQuery, InfluxOptions> {
+  type: string;
   urls: string[];
   username: string;
   password: string;
   name: string;
   database: any;
+  basicAuth: any;
+  withCredentials: any;
+  interval: any;
+  responseParser: any;
+  httpMode: string;
+  is2x: boolean;
+  instanceSettings: any;
   seraphApi: any;
   datasource: any;
-  responseParser: any;
 
-  constructor(instanceSettings: any, $q: any, backendSrv: any, templateSrv: any) {
+  constructor(instanceSettings: DataSourceInstanceSettings<any>) {
     super(instanceSettings);
-    this.responseParser = new ResponseParser();
-
     this.instanceSettings = instanceSettings;
+
     this.type = 'influxdb';
-    this.backendSrv = backendSrv;
-    this.urls = (instanceSettings.url ?? '').split(',').map((url: any) => {
+    this.urls = (instanceSettings.url ?? '').split(',').map(url => {
       return url.trim();
     });
 
     this.username = instanceSettings.username ?? '';
     this.password = instanceSettings.password ?? '';
-    // this.database = instanceSettings.database;
-    this.database = 'k8s_metric';
-    console.log(instanceSettings);
+    this.name = instanceSettings.name;
+    this.database = instanceSettings.database;
+    this.basicAuth = instanceSettings.basicAuth;
+    this.withCredentials = instanceSettings.withCredentials;
+    const settingsData = instanceSettings.jsonData || ({} as InfluxOptions);
+    this.interval = settingsData.timeInterval;
+    this.httpMode = settingsData.httpMode || 'GET';
+    this.responseParser = new ResponseParser();
+    this.is2x = settingsData.version === InfluxVersion.Flux;
+
     this.seraphApi = instanceSettings.jsonData.seraphApi;
     this.datasource = instanceSettings.jsonData.datasource;
+
+    console.log(instanceSettings);
   }
 
   query(request: any): Observable<any> {
@@ -217,43 +230,45 @@ export default class SeraphDatasource extends DataSourceWithBackend {
       req.headers['Content-type'] = 'application/x-www-form-urlencoded';
     }
 
-    return this.backendSrv.datasourceRequest(req).then(
-      (result: any) => {
-        const { data } = result;
-        if (data) {
-          data.executedQueryString = q;
-          if (data.results) {
-            const errors = result.data.results.filter((elem: any) => elem.error);
-            if (errors.length > 0) {
-              throw {
-                message: 'InfluxDB Error: ' + errors[0].error,
-                data,
-              };
+    return getBackendSrv()
+      .datasourceRequest(req)
+      .then(
+        (result: any) => {
+          const { data } = result;
+          if (data) {
+            data.executedQueryString = q;
+            if (data.results) {
+              const errors = result.data.results.filter((elem: any) => elem.error);
+              if (errors.length > 0) {
+                throw {
+                  message: 'InfluxDB Error: ' + errors[0].error,
+                  data,
+                };
+              }
             }
           }
-        }
-        return data;
-      },
-      (err: any) => {
-        if ((Number.isInteger(err.status) && err.status !== 0) || err.status >= 300) {
-          if (err.data && err.data.error) {
-            throw {
-              message: 'InfluxDB Error: ' + err.data.error,
-              data: err.data,
-              config: err.config,
-            };
+          return data;
+        },
+        (err: any) => {
+          if ((Number.isInteger(err.status) && err.status !== 0) || err.status >= 300) {
+            if (err.data && err.data.error) {
+              throw {
+                message: 'InfluxDB Error: ' + err.data.error,
+                data: err.data,
+                config: err.config,
+              };
+            } else {
+              throw {
+                message: 'Network Error: ' + err.statusText + '(' + err.status + ')',
+                data: err.data,
+                config: err.config,
+              };
+            }
           } else {
-            throw {
-              message: 'Network Error: ' + err.statusText + '(' + err.status + ')',
-              data: err.data,
-              config: err.config,
-            };
+            throw err;
           }
-        } else {
-          throw err;
         }
-      }
-    );
+      );
   }
 
   metricFindQuery(query: string, options?: any): any {
@@ -283,7 +298,7 @@ export default class SeraphDatasource extends DataSourceWithBackend {
       data: data,
     };
 
-    return this.backendSrv.datasourceRequest(req);
+    return getBackendSrv().datasourceRequest(req);
   }
 
   serializeParams(params: any) {
@@ -308,34 +323,36 @@ export default class SeraphDatasource extends DataSourceWithBackend {
     const req = {
       url: this.seraphApi + '/v1/grafana/metric/list',
     };
-    return this.backendSrv.datasourceRequest(req).then(
-      ({ data: { result }, code }: any) => {
-        if (this.datasource) {
-          return result[this.datasource];
-        }
-
-        return result.k8sMetric;
-      },
-      (err: any) => {
-        if ((Number.isInteger(err.status) && err.status !== 0) || err.status >= 300) {
-          if (err.data && err.data.error) {
-            throw {
-              message: 'InfluxDB Error: ' + err.data.error,
-              data: err.data,
-              config: err.config,
-            };
-          } else {
-            throw {
-              message: 'Network Error: ' + err.statusText + '(' + err.status + ')',
-              data: err.data,
-              config: err.config,
-            };
+    return getBackendSrv()
+      .datasourceRequest(req)
+      .then(
+        ({ data: { result }, code }: any) => {
+          if (this.datasource) {
+            return result[this.datasource];
           }
-        } else {
-          throw err;
+
+          return result.k8sMetric;
+        },
+        (err: any) => {
+          if ((Number.isInteger(err.status) && err.status !== 0) || err.status >= 300) {
+            if (err.data && err.data.error) {
+              throw {
+                message: 'InfluxDB Error: ' + err.data.error,
+                data: err.data,
+                config: err.config,
+              };
+            } else {
+              throw {
+                message: 'Network Error: ' + err.statusText + '(' + err.status + ')',
+                data: err.data,
+                config: err.config,
+              };
+            }
+          } else {
+            throw err;
+          }
         }
-      }
-    );
+      );
   }
 
   testDatasource() {
@@ -353,9 +370,5 @@ export default class SeraphDatasource extends DataSourceWithBackend {
       .catch((err: any) => {
         return { status: 'error', message: err.message };
       });
-  }
-
-  annotationQuery() {
-    return Promise.resolve([]);
   }
 }

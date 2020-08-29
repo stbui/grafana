@@ -192,9 +192,7 @@ export async function importPluginModule(path: string): Promise<any> {
 }
 
 export function importDataSourcePlugin(meta: DataSourcePluginMeta): Promise<GenericDataSourcePlugin> {
-  console.log('importDataSourcePlugin', meta);
   return importPluginModule(meta.module).then(pluginExports => {
-    console.log('pluginExports', pluginExports);
     if (pluginExports.plugin) {
       const dsPlugin = pluginExports.plugin as GenericDataSourcePlugin;
       dsPlugin.meta = meta;

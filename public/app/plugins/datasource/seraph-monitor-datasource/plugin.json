@@ -15,12 +15,14 @@
   },
 
   "info": {
+    "description": "Open source time series database",
     "author": {
-      "name": "stbui"
+      "name": "stbui",
+      "url": "https://github.com/stbui"
     },
     "logos": {
-      "small": "img/logo.svg",
-      "large": "img/logo.svg"
+      "small": "img/influxdb_logo.svg",
+      "large": "img/influxdb_logo.svg"
     }
   }
 }

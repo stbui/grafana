@@ -66,14 +66,12 @@ export class DatasourceSrv implements DataSourceService {
     }
 
     const dsConfig = config.datasources[name];
-    console.log(name, dsConfig);
     if (!dsConfig) {
       return Promise.reject({ message: `Datasource named ${name} was not found` });
     }
 
     try {
       const dsPlugin = await importDataSourcePlugin(dsConfig.meta);
-      console.log(dsPlugin, this.datasources);
       // check if its in cache now
       if (this.datasources[name]) {
         return this.datasources[name];
