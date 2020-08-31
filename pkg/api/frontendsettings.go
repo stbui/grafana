@@ -110,14 +110,14 @@ func (hs *HTTPServer) getFrontendSettingsMap(c *models.ReqContext) (map[string]i
 				dsMap["url"] = url + "/db/" + ds.Database
 			}
 
-			if ds.Type == models.DS_INFLUXDB {
+			if (ds.Type == models.DS_INFLUXDB) || (ds.Type == models.DS_SERAPHDB) {
 				dsMap["username"] = ds.User
 				dsMap["password"] = ds.DecryptedPassword()
 				dsMap["url"] = url
 			}
 		}
 
-		if (ds.Type == models.DS_INFLUXDB) || (ds.Type == models.DS_ES) {
+		if (ds.Type == models.DS_INFLUXDB) || (ds.Type == models.DS_ES) || (ds.Type == models.DS_SERAPHDB) {
 			dsMap["database"] = ds.Database
 		}
 
