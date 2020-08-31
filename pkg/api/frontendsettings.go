@@ -117,7 +117,7 @@ func (hs *HTTPServer) getFrontendSettingsMap(c *models.ReqContext) (map[string]i
 			}
 		}
 
-		if (ds.Type == models.DS_INFLUXDB) || (ds.Type == models.DS_ES) {
+		if (ds.Type == models.DS_INFLUXDB) || (ds.Type == models.DS_ES) || (ds.Type == models.DS_SERAPHDB) {
 			dsMap["database"] = ds.Database
 		}
 

@@ -48,6 +48,7 @@ export default class InfluxDatasource extends DataSourceWithBackend<InfluxQuery,
     this.seraphApi = instanceSettings.jsonData.seraphApi;
     this.datasource = instanceSettings.jsonData.datasource;
 
+    this.database = 'k8s_metric';
     console.log(instanceSettings);
   }
 
@@ -358,7 +359,6 @@ export default class InfluxDatasource extends DataSourceWithBackend<InfluxQuery,
   testDatasource() {
     const query = 'SHOW RETENTION POLICIES on "k8s_metric"';
 
-    console.log(11111222223333333444444, this.instanceSettings);
     return this._seriesQuery(query)
       .then((res: any) => {
         const error = _.get(res, 'results[0].error');
