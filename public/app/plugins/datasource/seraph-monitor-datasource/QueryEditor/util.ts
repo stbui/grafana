@@ -12,14 +12,11 @@ export const getVariables = () => {
   return segments;
 };
 
-export function getMeasurementAndPolicy(mean: any, interpolate?: any) {
+export function getMeasurementAndPolicy(mean: string) {
   let measurement = mean || 'measurement';
-  // const getTemplate = getTemplateSrv();
 
   if (!measurement.match('^/.*/$')) {
     measurement = '"' + measurement + '"';
-  } else if (interpolate) {
-    // measurement = getTemplate.replace(measurement, this.scopedVars, 'regex');
   }
 
   return measurement;
@@ -34,9 +31,11 @@ export const sqlBuilder = (o: any) => {
       return `"${field.value}"`;
     });
     sql += selectField.join(',');
+  } else {
+    sql += '*';
   }
 
-  sql += ` FROM ${source.measurement} WHERE `;
+  sql += ` FROM ${getMeasurementAndPolicy(source.measurement)} WHERE `;
 
   //
   if (source.tags) {

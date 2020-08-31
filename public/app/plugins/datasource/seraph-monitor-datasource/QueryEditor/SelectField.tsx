@@ -1,7 +1,45 @@
+// @ts-nocheck
 import React, { useState, useEffect } from 'react';
-import { Select } from '@grafana/ui';
+import { Select, Cascader } from '@grafana/ui';
 import Plus from './Plus';
 import Minus from './Minus';
+
+const optionsa = [
+  {
+    label: 'Aggregations',
+    value: 'Aggregations',
+    items: [
+      {
+        label: 'count',
+        value: 'count',
+      },
+      {
+        label: 'distinct',
+        value: 'distinct',
+      },
+      {
+        label: 'integral',
+        value: 'integral',
+      },
+      {
+        label: 'mean',
+        value: 'mean',
+      },
+      {
+        label: 'median',
+        value: 'median',
+      },
+      {
+        label: 'mode',
+        value: 'mode',
+      },
+      {
+        label: 'sum',
+        value: 'sum',
+      },
+    ],
+  },
+];
 
 export default ({ defaultValue, filed, onChange }: any) => {
   const options = filed.map((f: any) => ({ label: f, value: f }));
@@ -66,6 +104,9 @@ export default ({ defaultValue, filed, onChange }: any) => {
               onChange={value => onSelectChange(value, key)}
             />
           </div>
+          {/* <div className="gf-form" style={{ marginRight: 4 }}>
+            <Cascader options={optionsa} onSelect={val => console.log(val)} />
+          </div> */}
           <div className="gf-form" style={{ marginRight: 4 }}>
             <label className="gf-form-label">
               <a className=" pointer" onClick={() => onRemove(key)}>

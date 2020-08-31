@@ -11,6 +11,7 @@ const mean = [
 const time = [
   { label: '聚合时间(1s)', value: '1s' },
   { label: '聚合时间(5s)', value: '5s' },
+  { label: '聚合时间(10s)', value: '10s' },
 ];
 
 const fill = [
