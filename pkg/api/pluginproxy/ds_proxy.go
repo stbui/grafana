@@ -172,6 +172,13 @@ func (proxy *DataSourceProxy) getDirector() func(req *http.Request) {
 				req.Header.Del("Authorization")
 				req.Header.Add("Authorization", util.GetBasicAuthHeader(proxy.ds.User, proxy.ds.DecryptedPassword()))
 			}
+		case models.DS_SERAPHDB:
+			req.URL.Path = util.JoinURLFragments(proxy.targetUrl.Path, proxy.proxyPath)
+			req.URL.RawQuery = reqQueryVals.Encode()
+			if !proxy.ds.BasicAuth {
+				req.Header.Del("Authorization")
+				req.Header.Add("Authorization", util.GetBasicAuthHeader(proxy.ds.User, proxy.ds.DecryptedPassword()))
+			}
 		default:
 			req.URL.Path = util.JoinURLFragments(proxy.targetUrl.Path, proxy.proxyPath)
 		}
