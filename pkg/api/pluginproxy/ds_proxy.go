@@ -166,6 +166,7 @@ func (proxy *DataSourceProxy) getDirector() func(req *http.Request) {
 			reqQueryVals.Add("p", proxy.ds.DecryptedPassword())
 			req.URL.RawQuery = reqQueryVals.Encode()
 		case models.DS_INFLUXDB:
+		case models.DS_SERAPHDB:
 			req.URL.Path = util.JoinURLFragments(proxy.targetUrl.Path, proxy.proxyPath)
 			req.URL.RawQuery = reqQueryVals.Encode()
 			if !proxy.ds.BasicAuth {
