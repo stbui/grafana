@@ -11,7 +11,7 @@ import (
 const (
 	DS_GRAPHITE      = "graphite"
 	DS_INFLUXDB      = "influxdb"
-	DS_SERAPHDB      = "seraphdb"
+	DS_SERAPHDB      = "seraph-monitor-datasource"
 	DS_INFLUXDB_08   = "influxdb_08"
 	DS_ES            = "elasticsearch"
 	DS_OPENTSDB      = "opentsdb"
