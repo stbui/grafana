@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Select } from '@grafana/ui';
+import Select from './Select';
 import Plus from './Plus';
 import Minus from './Minus';
 
@@ -56,24 +56,21 @@ export default ({ defaultValue, filed, onChange }: any) => {
     onChange && onChange(newData);
   };
 
-  const onSelectConditionChange = ({ label, value }: any, key: any) => {
+  const onSelectConditionChange = (value: any, key: any) => {
     const newData = [...state];
     newData[key].condition = value;
-    newData[key].condition_label = label;
 
     onChange && onChange(newData);
   };
-  const onSelectKeyChange = ({ label, value }: any, key: any) => {
+  const onSelectKeyChange = (value: any, key: any) => {
     const newData = [...state];
     newData[key].key = value;
-    newData[key].key_label = label;
 
     onChange && onChange(newData);
   };
-  const onSelectOperatorChange = ({ label, value }: any, key: any) => {
+  const onSelectOperatorChange = (value: any, key: any) => {
     const newData = [...state];
     newData[key].operator = value;
-    newData[key].operator_label = label;
 
     onChange && onChange(newData);
   };
@@ -117,8 +114,8 @@ export default ({ defaultValue, filed, onChange }: any) => {
                 width={20}
                 options={condition}
                 placeholder="请选择"
-                defaultValue={{ label: s.condition_label, value: s.condition }}
-                onChange={value => onSelectConditionChange(value, key)}
+                defaultValue={s.condition}
+                onChange={(value: any) => onSelectConditionChange(value, key)}
               />
             </div>
           </div>
@@ -131,8 +128,8 @@ export default ({ defaultValue, filed, onChange }: any) => {
                 width={20}
                 options={options}
                 placeholder="请选择"
-                defaultValue={{ label: s.key_label, value: s.key }}
-                onChange={value => onSelectKeyChange(value, key)}
+                defaultValue={s.key}
+                onChange={(value: any) => onSelectKeyChange(value, key)}
               />
             </div>
             <div className="gf-form" style={{ marginRight: 4 }}>
@@ -140,8 +137,8 @@ export default ({ defaultValue, filed, onChange }: any) => {
                 width={20}
                 options={operator}
                 placeholder="请选择"
-                defaultValue={{ label: s.operator_label, value: s.operator }}
-                onChange={value => onSelectOperatorChange(value, key)}
+                defaultValue={s.operator}
+                onChange={(value: any) => onSelectOperatorChange(value, key)}
               />
             </div>
             <div className="gf-form" style={{ marginRight: 4 }}>

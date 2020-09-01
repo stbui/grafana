@@ -79,8 +79,6 @@ export const QueryEditor = props => {
 
   const [sql, setSql] = useState(_query.query);
 
-  console.log(1111, query);
-
   const [state, setState] = useState({
     data: undefined,
     error: null,

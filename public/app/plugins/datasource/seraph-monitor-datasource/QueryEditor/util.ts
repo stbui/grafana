@@ -29,7 +29,13 @@ export const sqlBuilder = (o: any) => {
   if (source.select) {
     let selectField = source.select.map((field: any) => {
       if (field.fun) {
-        return `${field.fun}("${field.value}")`;
+        let funStr = `"${field.value}"`;
+
+        field.fun.forEach((element: any) => {
+          funStr = `${element}(${funStr})`;
+        });
+
+        return funStr;
       }
 
       return `"${field.value}"`;
@@ -64,11 +70,8 @@ export const sqlBuilder = (o: any) => {
         }
       }
 
-      // quote value unless regex
-      if (operator !== '=~' && operator !== '!~') {
-        if (operator !== '>' && operator !== '<') {
-          value = "'" + value.replace(/\\/g, '\\\\').replace(/\'/g, "\\'") + "'";
-        }
+      if (operator !== '>' && operator !== '<') {
+        value = "'" + value.replace(/\\/g, '\\\\').replace(/\'/g, "\\'") + "'";
       }
 
       return str + '"' + tag.key + '" ' + operator + ' ' + value;

@@ -1,43 +1,38 @@
 // @ts-nocheck
 import React, { useState, useEffect } from 'react';
-import { Select, Cascader } from '@grafana/ui';
+import Select from './Select';
+
 import Plus from './Plus';
 import Minus from './Minus';
 
 const optionsa = [
   {
-    label: 'Aggregations',
-    value: 'Aggregations',
-    items: [
-      {
-        label: 'count',
-        value: 'count',
-      },
-      {
-        label: 'distinct',
-        value: 'distinct',
-      },
-      {
-        label: 'integral',
-        value: 'integral',
-      },
-      {
-        label: 'mean',
-        value: 'mean',
-      },
-      {
-        label: 'median',
-        value: 'median',
-      },
-      {
-        label: 'mode',
-        value: 'mode',
-      },
-      {
-        label: 'sum',
-        value: 'sum',
-      },
-    ],
+    label: 'count',
+    value: 'count',
+  },
+  {
+    label: 'distinct',
+    value: 'distinct',
+  },
+  {
+    label: 'integral',
+    value: 'integral',
+  },
+  {
+    label: 'mean',
+    value: 'mean',
+  },
+  {
+    label: 'median',
+    value: 'median',
+  },
+  {
+    label: 'mode',
+    value: 'mode',
+  },
+  {
+    label: 'sum',
+    value: 'sum',
   },
 ];
 
@@ -60,21 +55,18 @@ export default ({ defaultValue, filed, onChange }: any) => {
     onChange && onChange(newData);
   };
 
-  const onSelectChange = ({ label, value }: any, key: any) => {
+  const onSelectChange = (value: any, key: any) => {
     const newData = [...state];
     newData[key].value = value;
-    newData[key].label = label;
 
     onChange && onChange(newData);
   };
 
-  const onCascaderSelect = (value, key: any) => {
-    if (value !== 'Aggregations') {
-      const newData = [...state];
-      newData[key].fun = value;
+  const onMultiSelectSelect = (value: any, key: any) => {
+    const newData = [...state];
+    newData[key].fun = value;
 
-      onChange && onChange(newData);
-    }
+    onChange && onChange(newData);
   };
 
   useEffect(() => {
@@ -109,16 +101,18 @@ export default ({ defaultValue, filed, onChange }: any) => {
               width={20}
               placeholder="请选择"
               options={options}
-              defaultValue={{ label: s.label, value: s.value }}
+              defaultValue={s.value}
               onChange={value => onSelectChange(value, key)}
             />
           </div>
           <div className="gf-form" style={{ marginRight: 4 }}>
-            <Cascader
-              width={20}
-              initialValue={s.fun}
+            <Select
+              multi
+              width={46}
+              placeholder="请选择"
               options={optionsa}
-              onSelect={value => onCascaderSelect(value, key)}
+              defaultValue={s.fun}
+              onChange={value => onMultiSelectSelect(value, key)}
             />
           </div>
           <div className="gf-form" style={{ marginRight: 4 }}>
