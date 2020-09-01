@@ -66,8 +66,20 @@ const Query = ({ defaultValue, data, onQuery }) => {
 
 export const QueryEditor = props => {
   const { datasource, query, onChange, onRunQuery } = props;
+  let _query = query;
 
-  const [sql, setSql] = useState(query.query);
+  if (Object.keys(query).length < 2) {
+    _query = {
+      groupBy: [{ type: 'time', value: '1m', label: '聚合时间(1m)', index: Math.random() }],
+      select: [{ value: 'value', label: 'value', fun: 'mean', index: Math.random() }],
+    };
+
+    _query.query = sqlBuilder(_query);
+  }
+
+  const [sql, setSql] = useState(_query.query);
+
+  console.log(1111, query);
 
   const [state, setState] = useState({
     data: undefined,
@@ -137,7 +149,7 @@ export const QueryEditor = props => {
         </div>
       </div>
 
-      <Query defaultValue={query} data={state.data} onQuery={onQuery} />
+      <Query defaultValue={_query} data={state.data} onQuery={onQuery} />
     </div>
   );
 };

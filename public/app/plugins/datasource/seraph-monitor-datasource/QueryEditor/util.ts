@@ -28,6 +28,10 @@ export const sqlBuilder = (o: any) => {
 
   if (source.select) {
     let selectField = source.select.map((field: any) => {
+      if (field.fun) {
+        return `${field.fun}("${field.value}")`;
+      }
+
       return `"${field.value}"`;
     });
     sql += selectField.join(',');
@@ -43,6 +47,11 @@ export const sqlBuilder = (o: any) => {
       let str = '';
       let operator = tag.operator;
       let value = tag.value;
+
+      if (!value) {
+        return;
+      }
+
       if (index > 0) {
         str = (tag.condition || 'AND') + ' ';
       }
@@ -52,6 +61,13 @@ export const sqlBuilder = (o: any) => {
           operator = '=~';
         } else {
           operator = '=';
+        }
+      }
+
+      // quote value unless regex
+      if (operator !== '=~' && operator !== '!~') {
+        if (operator !== '>' && operator !== '<') {
+          value = "'" + value.replace(/\\/g, '\\\\').replace(/\'/g, "\\'") + "'";
         }
       }
 

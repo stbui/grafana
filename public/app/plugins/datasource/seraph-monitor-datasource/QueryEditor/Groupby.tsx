@@ -9,9 +9,9 @@ const mean = [
 ];
 
 const time = [
-  { label: '聚合时间(1s)', value: '1s' },
-  { label: '聚合时间(5s)', value: '5s' },
-  { label: '聚合时间(10s)', value: '10s' },
+  { label: '聚合时间(1m)', value: '1m' },
+  { label: '聚合时间(5m)', value: '5m' },
+  { label: '聚合时间(10m)', value: '10m' },
 ];
 
 const fill = [

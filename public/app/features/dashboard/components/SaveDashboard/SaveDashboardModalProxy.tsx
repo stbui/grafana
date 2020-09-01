@@ -4,15 +4,13 @@ import { SaveDashboardAsModal } from './SaveDashboardAsModal';
 import { SaveDashboardModalProps } from './types';
 import { SaveDashboardModal } from './SaveDashboardModal';
 
-export const SaveDashboardModalProxy: React.FC<SaveDashboardModalProps> = ({
-  seraph,
-  dashboard,
-  onDismiss,
-  onSaveSuccess,
-}) => {
+export const SaveDashboardModalProxy: React.FC<SaveDashboardModalProps> = ({ dashboard, onDismiss, onSaveSuccess }) => {
   const isProvisioned = dashboard.meta.provisioned;
   const isNew = dashboard.version === 0;
   const isChanged = dashboard.version > 0;
+
+  let seraph = window.localStorage.getItem('seraph');
+  seraph = seraph ? JSON.parse(seraph) : {};
 
   const modalProps = {
     dashboard,

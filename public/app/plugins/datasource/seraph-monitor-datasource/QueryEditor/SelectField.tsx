@@ -68,6 +68,15 @@ export default ({ defaultValue, filed, onChange }: any) => {
     onChange && onChange(newData);
   };
 
+  const onCascaderSelect = (value, key: any) => {
+    if (value !== 'Aggregations') {
+      const newData = [...state];
+      newData[key].fun = value;
+
+      onChange && onChange(newData);
+    }
+  };
+
   useEffect(() => {
     if (defaultValue) {
       setState(defaultValue);
@@ -104,9 +113,14 @@ export default ({ defaultValue, filed, onChange }: any) => {
               onChange={value => onSelectChange(value, key)}
             />
           </div>
-          {/* <div className="gf-form" style={{ marginRight: 4 }}>
-            <Cascader options={optionsa} onSelect={val => console.log(val)} />
-          </div> */}
+          <div className="gf-form" style={{ marginRight: 4 }}>
+            <Cascader
+              width={20}
+              initialValue={s.fun}
+              options={optionsa}
+              onSelect={value => onCascaderSelect(value, key)}
+            />
+          </div>
           <div className="gf-form" style={{ marginRight: 4 }}>
             <label className="gf-form-label">
               <a className=" pointer" onClick={() => onRemove(key)}>

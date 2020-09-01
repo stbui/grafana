@@ -89,6 +89,10 @@ export class DashboardPage extends PureComponent<Props, State> {
       routeInfo: this.props.routeInfo,
       fixUrl: true,
     });
+
+    if (this.props.seraph) {
+      window.localStorage.setItem('seraph', JSON.stringify(this.props.seraph));
+    }
   }
 
   componentWillUnmount() {
@@ -287,7 +291,6 @@ export class DashboardPage extends PureComponent<Props, State> {
       inspectTab,
       isPanelEditorOpen,
       updateLocation,
-      seraph,
     } = this.props;
 
     const { editPanel, viewPanel, scrollTop, updateScrollTop } = this.state;
@@ -305,13 +308,7 @@ export class DashboardPage extends PureComponent<Props, State> {
 
     return (
       <div className="dashboard-container">
-        <DashNav
-          seraph={seraph}
-          dashboard={dashboard}
-          isFullscreen={!!viewPanel}
-          $injector={$injector}
-          onAddPanel={this.onAddPanel}
-        />
+        <DashNav dashboard={dashboard} isFullscreen={!!viewPanel} $injector={$injector} onAddPanel={this.onAddPanel} />
 
         <div className="dashboard-scroll">
           <CustomScrollbar
