@@ -1,5 +1,6 @@
+// @ts-nocheck
 import React, { useState, useEffect } from 'react';
-import { Select } from '@grafana/ui';
+import Select from './Select';
 import { getVariables } from './util';
 
 let typeCache: any;
@@ -40,19 +41,19 @@ export default ({ defaultValue, data, onChange }: any) => {
   const [group, setGroup] = useState([]);
   const [metric, setMetric] = useState([]);
 
-  const onTypeChange = ({ label, value }: any) => {
+  const onTypeChange = (value: any) => {
     typeCache = value;
     const g = getSerapMonitorGroup(data, value);
     setGroup(g);
   };
 
-  const onGroupChange = ({ label, value }: any) => {
+  const onGroupChange = (value: any) => {
     groupCache = value;
     const g = getSerapMonitorMetric(data, typeCache, value);
     setMetric(g);
   };
 
-  const onMetricChange = ({ label, value }: any, isInit?: any) => {
+  const onMetricChange = (value: any, isInit?: any) => {
     const metricField = data[typeCache][groupCache][value];
     if (metricField.filed) {
       metricField.filed = [...getVariables(), ...metricField.filed];
@@ -71,9 +72,9 @@ export default ({ defaultValue, data, onChange }: any) => {
 
   useEffect(() => {
     if (defaultValue.monitorType && defaultValue.monitorType) {
-      onTypeChange({ label: defaultValue.monitorType, value: defaultValue.monitorType });
-      onGroupChange({ label: defaultValue.monitorGroup, value: defaultValue.monitorGroup });
-      onMetricChange({ label: defaultValue.measurement, value: defaultValue.measurement }, true);
+      onTypeChange(defaultValue.monitorType);
+      onGroupChange(defaultValue.monitorGroup);
+      onMetricChange(defaultValue.measurement, true);
     }
   }, []);
 
@@ -83,31 +84,13 @@ export default ({ defaultValue, data, onChange }: any) => {
         <label className="gf-form-label query-keyword width-7">数据源</label>
       </div>
       <div className="gf-form" style={{ marginRight: 4 }}>
-        <Select
-          defaultValue={{ label: defaultValue.monitorType, value: defaultValue.monitorType }}
-          width={20}
-          options={typeOptions}
-          placeholder="请选择"
-          onChange={onTypeChange}
-        />
+        <Select defaultValue={defaultValue.monitorType} width={20} options={typeOptions} onChange={onTypeChange} />
       </div>
       <div className="gf-form" style={{ marginRight: 4 }}>
-        <Select
-          defaultValue={{ label: defaultValue.monitorGroup, value: defaultValue.monitorGroup }}
-          width={20}
-          options={group}
-          placeholder="请选择"
-          onChange={onGroupChange}
-        />
+        <Select defaultValue={defaultValue.monitorGroup} width={20} options={group} onChange={onGroupChange} />
       </div>
       <div className="gf-form" style={{ marginRight: 4 }}>
-        <Select
-          defaultValue={{ label: defaultValue.measurement, value: defaultValue.measurement }}
-          width={30}
-          options={metric}
-          placeholder="请选择"
-          onChange={onMetricChange}
-        />
+        <Select defaultValue={defaultValue.measurement} width={30} options={metric} onChange={onMetricChange} />
       </div>
     </div>
   );
