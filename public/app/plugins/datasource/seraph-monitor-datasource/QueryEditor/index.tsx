@@ -70,8 +70,8 @@ export const QueryEditor = props => {
 
   if (Object.keys(query).length < 2) {
     _query = {
-      groupBy: [{ type: 'time', value: '1m', label: '聚合时间(1m)', index: Math.random() }],
-      select: [{ value: 'value', label: 'value', fun: 'mean', index: Math.random() }],
+      groupBy: [{ type: 'time', value: '1m', index: Math.random() }],
+      select: [{ value: 'value', fun: ['mean'], index: Math.random() }],
     };
 
     _query.query = sqlBuilder(_query);

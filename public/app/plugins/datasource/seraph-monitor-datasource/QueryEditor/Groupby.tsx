@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Select } from '@grafana/ui';
+import Select from './Select';
 import Plus from './Plus';
 import Minus from './Minus';
 
@@ -19,17 +19,9 @@ const fill = [
   { label: 'null', value: 'null' },
 ];
 
-const MeanSelect = (props: any) => <Select width={20} placeholder="请选择" options={mean} {...props} />;
+const initialState = [{ type: 'time', value: '1s', index: Math.random() }];
 
-const TimeSelect = (props: any) => <Select width={20} placeholder="请选择" options={time} {...props} />;
-
-const FillSelect = (props: any) => <Select width={20} placeholder="请选择" options={fill} {...props} />;
-
-const initialState = [{ type: 'time', value: '1s', label: '聚合时间(1s)', index: Math.random() }];
-
-export default ({ defaultValue, tag, onChange }: any) => {
-  const options = tag.map((f: any) => ({ label: f, value: f }));
-
+export default ({ defaultValue, onChange, tag }: any) => {
   const [state, setState] = useState(defaultValue || initialState);
 
   const onAdd = () => {
@@ -46,10 +38,9 @@ export default ({ defaultValue, tag, onChange }: any) => {
     onChange && onChange(newData);
   };
 
-  const onSelectChange = ({ label, value }: any, key: any) => {
+  const onSelectChange = (value: any, key: any) => {
     const newData = [...state];
     newData[key].value = value;
-    newData[key].label = label;
 
     onChange && onChange(newData);
   };
@@ -58,22 +49,28 @@ export default ({ defaultValue, tag, onChange }: any) => {
     switch (s.type) {
       case 'fill':
         return (
-          <FillSelect
-            defaultValue={{ label: s.label, value: s.value }}
+          <Select
+            width={20}
+            options={fill}
+            defaultValue={s.value}
             onChange={(value: any) => onSelectChange(value, key)}
           />
         );
       case 'time':
         return (
-          <TimeSelect
-            defaultValue={{ label: s.label, value: s.value }}
+          <Select
+            width={20}
+            options={time}
+            defaultValue={s.value}
             onChange={(value: any) => onSelectChange(value, key)}
           />
         );
       case 'mean':
         return (
-          <MeanSelect
-            defaultValue={{ label: s.label, value: s.value }}
+          <Select
+            width={20}
+            options={mean}
+            defaultValue={s.value}
             onChange={(value: any) => onSelectChange(value, key)}
           />
         );
@@ -81,9 +78,8 @@ export default ({ defaultValue, tag, onChange }: any) => {
         return (
           <Select
             width={20}
-            options={options}
-            placeholder="请选择"
-            defaultValue={{ label: s.label, value: s.value }}
+            options={tag}
+            defaultValue={s.value}
             onChange={(value: any) => onSelectChange(value, key)}
           />
         );
