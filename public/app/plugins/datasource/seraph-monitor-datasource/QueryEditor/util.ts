@@ -42,7 +42,7 @@ export const sqlBuilder = (o: any) => {
     });
     sql += selectField.join(',');
   } else {
-    sql += '*';
+    sql += 'mean("value")';
   }
 
   sql += ` FROM ${getMeasurementAndPolicy(source.measurement)} WHERE `;

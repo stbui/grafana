@@ -110,6 +110,7 @@ export const SaveDashboardAsForm: React.FC<SaveDashboardFormProps & { isNew?: bo
             ...q,
             // 创建
             action: 0,
+            title: data.title,
           };
 
           saveToSeraph(seraph);
