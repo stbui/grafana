@@ -22,6 +22,8 @@ const fill = [
 const initialState = [{ type: 'time', value: '1s', index: Math.random() }];
 
 export default ({ defaultValue, onChange, tag }: any) => {
+  const options = tag.map((f: any) => ({ label: f, value: f }));
+
   const [state, setState] = useState(defaultValue || initialState);
 
   const onAdd = () => {
@@ -78,7 +80,7 @@ export default ({ defaultValue, onChange, tag }: any) => {
         return (
           <Select
             width={20}
-            options={tag}
+            options={options}
             defaultValue={s.value}
             onChange={(value: any) => onSelectChange(value, key)}
           />
@@ -93,7 +95,7 @@ export default ({ defaultValue, onChange, tag }: any) => {
   }, []);
 
   return (
-    <div className="">
+    <div>
       {state.length === 0 ? (
         <div className="gf-form-inline">
           <div className="gf-form">
