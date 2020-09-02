@@ -57,7 +57,7 @@ const Query = ({ defaultValue, data, onQuery }) => {
     <div>
       <From defaultValue={defaultValue} data={data} onChange={onFromChange} />
       <SelectField defaultValue={defaultValue.select} filed={state.filed} onChange={onSelectFieldChange} />
-      <Groupby defaultValue={defaultValue.groupBy} tag={[]} onChange={onGroupbyChange} />
+      <Groupby defaultValue={defaultValue.groupBy} tag={state.tag} onChange={onGroupbyChange} />
       <Where defaultValue={defaultValue.tags} filed={state.tag} onChange={onWhereChange} />
       <Alias defaultValue={defaultValue.alias} value={state.filed} onChange={onAliasChange} />
     </div>
