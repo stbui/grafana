@@ -70,8 +70,10 @@ export const sqlBuilder = (o: any) => {
         }
       }
 
-      if (operator !== '>' && operator !== '<') {
-        value = "'" + value.replace(/\\/g, '\\\\').replace(/\'/g, "\\'") + "'";
+      if (operator !== '=~' && operator !== '!~') {
+        if (operator !== '>' && operator !== '<') {
+          value = "'" + value.replace(/\\/g, '\\\\').replace(/\'/g, "\\'") + "'";
+        }
       }
 
       return str + '"' + tag.key + '" ' + operator + ' ' + value;
