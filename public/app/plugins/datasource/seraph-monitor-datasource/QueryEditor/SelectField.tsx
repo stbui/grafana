@@ -7,6 +7,14 @@ import Minus from './Minus';
 
 const optionsa = [
   {
+    label: 'max',
+    value: 'max',
+  },
+  {
+    label: 'min',
+    value: 'min',
+  },
+  {
     label: 'count',
     value: 'count',
   },
