@@ -7,39 +7,23 @@ import Minus from './Minus';
 
 const optionsa = [
   {
-    label: 'max',
+    label: '最大值',
     value: 'max',
   },
   {
-    label: 'min',
+    label: '最小值',
     value: 'min',
   },
   {
-    label: 'count',
+    label: '个数',
     value: 'count',
   },
   {
-    label: 'distinct',
-    value: 'distinct',
-  },
-  {
-    label: 'integral',
-    value: 'integral',
-  },
-  {
-    label: 'mean',
+    label: '平均值',
     value: 'mean',
   },
   {
-    label: 'median',
-    value: 'median',
-  },
-  {
-    label: 'mode',
-    value: 'mode',
-  },
-  {
-    label: 'sum',
+    label: '求和',
     value: 'sum',
   },
 ];

@@ -180,7 +180,7 @@ export default class InfluxDatasource extends DataSourceWithBackend<InfluxQuery,
 
     if (options && options.range) {
       const timeFilter = this.getTimeFilter({ rangeRaw: options.range, timezone: options.timezone });
-      query = query.replace('$timeFilter', timeFilter);
+      query = query.replace(/\$timeFilter/g, timeFilter);
     }
 
     return this._influxRequest('GET', '/query', { q: query, epoch: 'ms' }, options);
