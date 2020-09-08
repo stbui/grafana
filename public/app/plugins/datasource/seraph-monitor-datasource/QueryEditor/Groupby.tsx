@@ -22,7 +22,10 @@ const fill = [
 const initialState = [{ type: 'time', value: '1s', index: Math.random() }];
 
 export default ({ defaultValue, onChange, tag }: any) => {
-  const options = tag.map((f: any) => ({ label: f, value: f }));
+  const options = tag.map((f: any) => {
+    const [label, value] = f.split('$');
+    return { label: `${label}(${value})`, value };
+  });
 
   const [state, setState] = useState(defaultValue || initialState);
 
@@ -52,7 +55,7 @@ export default ({ defaultValue, onChange, tag }: any) => {
       case 'fill':
         return (
           <Select
-            width={20}
+            width={40}
             options={fill}
             defaultValue={s.value}
             onChange={(value: any) => onSelectChange(value, key)}
@@ -61,7 +64,7 @@ export default ({ defaultValue, onChange, tag }: any) => {
       case 'time':
         return (
           <Select
-            width={20}
+            width={40}
             options={time}
             defaultValue={s.value}
             onChange={(value: any) => onSelectChange(value, key)}
@@ -70,7 +73,7 @@ export default ({ defaultValue, onChange, tag }: any) => {
       case 'mean':
         return (
           <Select
-            width={20}
+            width={40}
             options={mean}
             defaultValue={s.value}
             onChange={(value: any) => onSelectChange(value, key)}
@@ -79,7 +82,7 @@ export default ({ defaultValue, onChange, tag }: any) => {
       default:
         return (
           <Select
-            width={20}
+            width={40}
             options={options}
             defaultValue={s.value}
             onChange={(value: any) => onSelectChange(value, key)}

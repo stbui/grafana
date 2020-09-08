@@ -38,8 +38,10 @@ export const condition = [
 ];
 
 export default ({ defaultValue, filed, onChange }: any) => {
-  const options = filed.map((f: any) => ({ label: f, value: f }));
-
+  const options = filed.map((f: any) => {
+    const [label, value] = f.split('$');
+    return { label: `${label}(${value})`, value };
+  });
   const [state, setState] = useState(defaultValue || []);
 
   const onAdd = () => {
@@ -125,7 +127,7 @@ export default ({ defaultValue, filed, onChange }: any) => {
             </div>
             <div className="gf-form" style={{ marginRight: 4 }}>
               <Select
-                width={20}
+                width={30}
                 options={options}
                 placeholder="请选择"
                 defaultValue={s.key}
@@ -134,7 +136,7 @@ export default ({ defaultValue, filed, onChange }: any) => {
             </div>
             <div className="gf-form" style={{ marginRight: 4 }}>
               <Select
-                width={20}
+                width={10}
                 options={operator}
                 placeholder="请选择"
                 defaultValue={s.operator}
@@ -144,7 +146,7 @@ export default ({ defaultValue, filed, onChange }: any) => {
             <div className="gf-form" style={{ marginRight: 4 }}>
               <input
                 placeholder="请输入"
-                className="gf-form-input width-10"
+                className="gf-form-input width-12"
                 defaultValue={s.value}
                 onChange={value => onSelectValueChange(value, key)}
               />
