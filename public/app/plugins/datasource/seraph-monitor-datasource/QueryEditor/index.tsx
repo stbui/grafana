@@ -113,6 +113,7 @@ export const QueryEditor = props => {
   const onQuery = (value: any) => {
     const target = {
       ...query,
+      groupBy: [{ type: 'time', value: '1m', index: Math.random() }],
       ...value,
       raw: false,
     };
