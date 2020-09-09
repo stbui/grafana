@@ -43,9 +43,8 @@
       on-change="ctrl.onFolderChange" enable-create-new="true" is-valid-selection="true" label-class="width-7"
       dashboard-id="ctrl.dashboard.id">
     </folder-picker> -->
-    <gf-form-switch class="gf-form" label="启用"
-      tooltip="Uncheck, then save and reload to disable all dashboard editing" checked="ctrl.dashboard.editable"
-      label-class="width-7">
+    <gf-form-switch class="gf-form" label="启用" tooltip="Uncheck, then save and reload to disable all dashboard editing"
+      checked="ctrl.dashboard.editable" label-class="width-7">
     </gf-form-switch>
   </div>
 
@@ -65,13 +64,13 @@
       <select ng-model="ctrl.dashboard.graphTooltip" class='gf-form-input'
         ng-options="f.value as f.text for f in [{value: 0, text: 'Default'}, {value: 1, text: 'Shared crosshair'},{value: 2, text: 'Shared Tooltip'}]"></select>
     </div>
-  </div> -->
+  </div>
   <div class="gf-form-button-row">
     <button class="btn btn-danger" ng-click="ctrl.deleteDashboard()" ng-show="ctrl.canDelete"
       aria-label="Dashboard settings page delete dashboard button">
       删除 Dashboard
     </button>
-  </div>
+  </div> -->
 </div>
 
 <div class="dashboard-settings__content" ng-if="ctrl.viewId === 'annotations'"
