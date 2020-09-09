@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Select from './Select';
 import { getVariables } from './util';
 
@@ -36,10 +36,10 @@ export const getSerapMonitorMetric: any = (data: any, monitorType: any, monitorG
 };
 
 export default ({ defaultValue, data, onChange }: any) => {
-  const typeOptions = getSerapMonitorType(data);
-
   const [group, setGroup] = useState([]);
   const [metric, setMetric] = useState([]);
+
+  const typeOptions = useMemo(() => getSerapMonitorType(data), []);
 
   const onTypeChange = (value: any) => {
     typeCache = value;
@@ -77,6 +77,8 @@ export default ({ defaultValue, data, onChange }: any) => {
       onMetricChange(defaultValue.measurement, true);
     }
   }, []);
+
+  console.log(typeOptions);
 
   return (
     <div className="gf-form-inline">
