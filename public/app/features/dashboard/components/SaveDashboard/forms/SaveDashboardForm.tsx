@@ -46,6 +46,7 @@ export const SaveDashboardForm: React.FC<SaveDashboardFormProps> = ({
         ...q,
         // gengxing
         action: 1,
+        title: dashboard.title,
       };
 
       saveToSeraph(params);
