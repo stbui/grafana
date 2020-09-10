@@ -57,8 +57,8 @@ const Query = ({ defaultValue, data, onQuery }) => {
     <div>
       <From defaultValue={defaultValue} data={data} onChange={onFromChange} />
       <SelectField defaultValue={defaultValue.select} filed={state.filed} onChange={onSelectFieldChange} />
-      <Groupby defaultValue={defaultValue.groupBy} tag={state.tag} onChange={onGroupbyChange} />
       <Where defaultValue={defaultValue.tags} filed={state.tag} onChange={onWhereChange} />
+      <Groupby defaultValue={defaultValue.groupBy} tag={state.tag} onChange={onGroupbyChange} />
       <Alias defaultValue={defaultValue.alias} value={state.filed} onChange={onAliasChange} />
     </div>
   );
@@ -144,7 +144,7 @@ export const QueryEditor = props => {
     <div>
       <div className="gf-form-inline">
         <div className="gf-form gf-form--grow">
-          <textarea value={sql} rows="3" className="gf-form-input" onChange={onInputChange}></textarea>
+          <textarea value={sql} rows="1" className="gf-form-input" onChange={onInputChange}></textarea>
         </div>
       </div>
 
